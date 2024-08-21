@@ -1,0 +1,21 @@
+{
+    "C_Cpp.intelliSenseEngine": "default",
+    "idf.adapterTargetName": "esp32s3",
+    "idf.openOcdConfigs": [
+        "interface/ftdi/esp32_devkitj_v1.cfg",
+        "target/esp32.cfg"
+    ],
+    "files.associations": {
+        "lv_demos.h": "c",
+        "semphr.h": "c",
+        "stdio.h": "c",
+        "pantalla.h": "c",
+        "init.h": "c",
+        "lvgl.h": "c",
+        "lv_draw_sw_gradient.h": "c"
+    },
+    "idf.flashType": "UART",
+    "idf.port": "/dev/ttyUSB0",
+    "idf.portWin": "COM3",
+    "cmake.configureOnOpen": false,
+}
