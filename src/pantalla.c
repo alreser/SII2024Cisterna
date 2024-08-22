@@ -69,19 +69,51 @@ void PantallaPrincipal(void)
 
 
 
+    
+};
+
+
+
+/// @brief Funcion que crea el contenido del TAB Operación
+/// @param parent 
+static void CrearTabOperacion(lv_obj_t * parent)
+{
+    //creo un plane dentro del Tab que contendrá todos los controles.
+    lv_obj_t * panel1 = lv_obj_create(parent);
+    lv_obj_set_style_pad_all(panel1,2,0);
+    lv_obj_set_height(panel1, LCD_HEIGHT - tab_h - 20);
+    lv_obj_set_width(panel1, LCD_WIDTH - 30);
+    lv_obj_t * btnSalir = lv_button_create(panel1); //Creo el objeto como hijo del padre=>Tab
+    //A modo de ejemplo creo un boton y le asigno los estilos por defecto que cree dentro de la funcion AplicarEstiloBoton
+    AplicarEstiloBoton(btnSalir, "Salir",50,50); 
+
+};
+
+
+
+/// @brief Función que crea el contenido del TAB Configuración
+/// @param parent 
+static void CrearTabConfiguracion(lv_obj_t * parent)
+{
+
+    lv_obj_t * panelc = lv_obj_create(parent);
+    lv_obj_set_style_pad_all(panelc,2,0);
+    lv_obj_set_height(panelc, LCD_HEIGHT - tab_h - 20);
+    lv_obj_set_width(panelc, LCD_WIDTH - 30);
+
     /*
 
     //Create a white label, set its text and align it to the center 
-    lv_obj_t * label = lv_label_create(lv_screen_active());
+    lv_obj_t * label = lv_label_create(panelc());
     lv_label_set_text(label, "TAB Operacion con boton");
-    lv_obj_set_style_text_color(lv_screen_active(), lv_color_hex(0xffffff), LV_PART_MAIN);
+    lv_obj_set_style_text_color(panelc(), lv_color_hex(0xffffff), LV_PART_MAIN);
     lv_obj_align(label, LV_ALIGN_CENTER,0, 0); //(LCD_WIDTH/2) - strlen("TAB Operacion con boton")/2
     lv_obj_set_height(label, lv_pct(100));
 
     
 
     //Boton 
-    lv_obj_t * btnGuardar = lv_button_create(lv_screen_active());      
+    lv_obj_t * btnGuardar = lv_button_create(panelc());      
     lv_obj_set_pos(btnGuardar, 100, 100);                             
     lv_obj_set_size(btnGuardar, 120, 50);                          
     lv_obj_add_style(btnGuardar,&StyleBtn,0);
@@ -93,33 +125,10 @@ void PantallaPrincipal(void)
 
 
  //Boton de prueba 
-    lv_obj_t * btnSalir = lv_button_create(lv_screen_active());
+    lv_obj_t * btnSalir = lv_button_create(panelc());
     AplicarEstiloBoton(btnSalir, "Salir", 300, 100); 
      */
 
-};
-
-
-
-/// @brief Funcion que crea el contenido del TAB Operación
-/// @param parent 
-static void CrearTabOperacion(lv_obj_t * parent)
-{
-    lv_obj_t * panel1 = lv_obj_create(parent);
-    lv_obj_set_style_pad_all(panel1,5,0);
-    lv_obj_set_height(panel1, LCD_HEIGHT - tab_h - 20);
-    lv_obj_set_width(panel1, LCD_WIDTH - 30);
-    lv_obj_t * btnSalir = lv_button_create(panel1); //Creo el objeto como hijo del padre=>Tab
-    AplicarEstiloBoton(btnSalir, "Salir",50,50); 
-
-};
-
-
-
-/// @brief Función que crea el contenido del TAB Configuración
-/// @param parent 
-static void CrearTabConfiguracion(lv_obj_t * parent)
-{
 
 };
 

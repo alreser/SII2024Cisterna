@@ -3,6 +3,12 @@
 #include "src/draw/sw/lv_draw_sw_gradient.h"
 #include <../headers/init.h>
 
+
+/// @brief Funcion que recibe un objeto Boton y le aplica estilos predefinidos para toda la aplicacion
+/// @param objBoton  Puntero al onbjeto Botón. 
+/// @param LabelText Texto que se mostrará en el botón
+/// @param PosicionX  Posición en pantalla en X  relativa al objeto Padre
+/// @param PosicionY  Posición en pantalla en y  relativa al objeto Padre
 void AplicarEstiloBoton(lv_obj_t * objBoton,  char * LabelText, int32_t PosicionX, int32_t PosicionY)
 {
     lv_obj_t * btn = objBoton;
