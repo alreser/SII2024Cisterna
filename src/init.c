@@ -9,13 +9,14 @@
 /// @param LabelText Texto que se mostrará en el botón
 /// @param PosicionX  Posición en pantalla en X  relativa al objeto Padre
 /// @param PosicionY  Posición en pantalla en y  relativa al objeto Padre
-void AplicarEstiloBoton(lv_obj_t * objBoton,  char * LabelText, int32_t PosicionX, int32_t PosicionY)
+void BotonAplicarEstilo(lv_obj_t * objBoton,  char * LabelText, int32_t PosicionX, int32_t PosicionY)
 {
     lv_obj_t * btn = objBoton;
-    lv_obj_set_style_bg_color(btn, grad_colors[0], 0);
-    lv_obj_set_style_bg_grad_color(btn, grad_colors[1], 0);
+
+    lv_obj_set_style_bg_color(btn, lv_color_hex(0x348b50), 0); //color verde
+    lv_obj_set_style_bg_grad_color(btn, lv_color_hex(0x389c58), 0);  
     lv_obj_set_style_bg_grad_dir(btn, LV_GRAD_DIR_HOR, 0);
-    lv_obj_set_size(btn, 120, 50);
+    lv_obj_set_size(btn, 110, 45);
     lv_obj_set_pos(btn, PosicionX, PosicionY);
     //lv_obj_align(btn, LV_ALIGN_CENTER, 0, -40);
 
@@ -24,13 +25,33 @@ void AplicarEstiloBoton(lv_obj_t * objBoton,  char * LabelText, int32_t Posicion
     lv_obj_center(label);
 };
 
+
+/// @brief Función que recibe un obj de tipo TextArea(LVGL) y le aplica los estilos predefinidos de la aplicación
+/// @param objTextBox Puntero al objeto TextArea
+/// @param Editable   Indica si será editable por el usuario y el tipo de teclado a presentar para el ingreso de datos. S 
+/// @param ValorDefecto  Es el valor que se mostrará por defecto y podrá ser editado si Editable=True
+/// @param PosicionX Posición en pantalla en X  relativa al objeto Padre
+/// @param PosicionY Posición en pantalla en y  relativa al objeto Padre
+void TextBoxAplicarEstilo(lv_obj_t * objTextBox, enum TextBoxEdicionEnum Editable,   char * ValorDefecto, int32_t PosicionX, int32_t PosicionY)
+{
+
+
+//Si Editable = True hay que habilitar el teclado flotante para ingreso de datos. 
+
+
+
+};
+
+
  void InicilizarComponentesPantalla()
 {
 
 
 // ESTILOS ///////// 
     lv_style_init(&style_title);
-    lv_style_set_text_font(&style_title, LV_FONT_MONTSERRAT_26);
+    lv_style_set_text_font(&style_title, LV_FONT_MONTSERRAT_46);
+    lv_style_set_text_color(&style_title, lv_palette_main(LV_PALETTE_BLUE));
+    lv_style_set_text_color(&style_title, lv_color_hex(0x4509f2)); //azul
 
     //Estilo Texto Normal
     lv_style_init(&style_text_Normal);

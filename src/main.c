@@ -10,7 +10,7 @@
 #include "driver/i2c_master.h"
 #include "driver/ledc.h"
 #include "lvgl.h"
-#include "demos/lv_demos.h"
+//#include "demos/lv_demos.h"
 #include  "../headers/pantalla.h"
 
 #define LCD_WIDTH               800
@@ -283,6 +283,9 @@ void app_main(void)
 
     lvgl_mux = xSemaphoreCreateRecursiveMutex();
     xTaskCreate(lvgl_port_task, "lvgl_port_task", LVGL_TASK_STACK_SIZE, NULL, LVGL_TASK_PRIORITY, NULL);
+
+
+
 
     // init touch i2c bus
     esp_lcd_touch_handle_t touch_handle = lvgl_touch_init();
