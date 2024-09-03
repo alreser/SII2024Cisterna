@@ -38,6 +38,7 @@ void PantallaPrincipal(void)
     lv_obj_t * tabOperacion = lv_tabview_add_tab(tabView, "OPERACION");
     lv_obj_t * tabConfiguracion = lv_tabview_add_tab(tabView, "CONFIGURACION");
 
+    
     //Creo la cabecera del TABView 
         lv_obj_t * tab_bar = lv_tabview_get_tab_bar(tabView);
         lv_obj_set_style_pad_left(tab_bar, LV_HOR_RES / 2, 0);
