@@ -35,7 +35,7 @@ void BotonAplicarEstilo(lv_obj_t * objBoton,  char * LabelText, int32_t Posicion
 void TextBoxAplicarEstilo(lv_obj_t * objTextBox, enum TextBoxEdicionEnum Editable,   char * ValorDefecto, int32_t PosicionX, int32_t PosicionY)
 {
 
-
+//lv_textarea_add_text(objTextBox, ValorDefecto); //Añado el valor por defecto .
 //Si Editable = True hay que habilitar el teclado flotante para ingreso de datos. 
 
 
