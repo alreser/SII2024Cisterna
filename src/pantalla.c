@@ -92,7 +92,7 @@ static void CrearTabOperacion(lv_obj_t * parent)
     /// Lista de controles para mostrar el estado del sistema  ////////////////////////////// 
 
     //Nivel tanque 
-    lv_obj_t * lblNivel = lv_label_create(panel1); //Creo un Label mostrar el texto Nivel del Tanque(Lts)
+    lv_obj_t * lblNivel = lv_label_create(panel1); //Creo un Label para mostrar el texto Nivel del Tanque(Lts)
    
     lv_obj_align(lblNivel, LV_ALIGN_TOP_LEFT, 10,20);
     lv_obj_add_flag(lblNivel, LV_OBJ_FLAG_IGNORE_LAYOUT);
@@ -122,7 +122,7 @@ static void CrearTabOperacion(lv_obj_t * parent)
     
     //A modo de ejemplo creo un boton y le asigno los estilos por defecto que cree dentro de la funcion AplicarEstiloBoton
     lv_obj_t * btnSalir = lv_button_create(panel1); //Creo el objeto como hijo del padre=>Tab
-    BotonAplicarEstilo(btnSalir, "Salir", LCD_WIDTH-150, 300); 
+    BotonAplicarEstilo(btnSalir, "Salir", LCD_WIDTH-150, 300); //Aplico el estilo por defecto que hemos definido para los botones
 
 };
 
@@ -132,39 +132,25 @@ static void CrearTabOperacion(lv_obj_t * parent)
 /// @param parent 
 static void CrearTabConfiguracion(lv_obj_t * parent)
 {
-
+    // Creo el panel donde estarán todos los controles (TextBox, Botones, etc.)
     lv_obj_t * panelc = lv_obj_create(parent);
     lv_obj_set_style_pad_all(panelc,2,0);
     lv_obj_set_height(panelc, LCD_HEIGHT - tab_h - 20);
     lv_obj_set_width(panelc, LCD_WIDTH - 30);
 
-    /*
 
-    //Create a white label, set its text and align it to the center 
-    lv_obj_t * label = lv_label_create(panelc());
-    lv_label_set_text(label, "TAB Operacion con boton");
-    lv_obj_set_style_text_color(panelc(), lv_color_hex(0xffffff), LV_PART_MAIN);
-    lv_obj_align(label, LV_ALIGN_CENTER,0, 0); //(LCD_WIDTH/2) - strlen("TAB Operacion con boton")/2
-    lv_obj_set_height(label, lv_pct(100));
 
-    
-
-    //Boton 
-    lv_obj_t * btnGuardar = lv_button_create(panelc());      
-    lv_obj_set_pos(btnGuardar, 100, 100);                             
-    lv_obj_set_size(btnGuardar, 120, 50);                          
-    lv_obj_add_style(btnGuardar,&StyleBtn,0);
+    //Creo un primero boton y lo asocio a un evento 
+    lv_obj_t * btnGuardar = lv_button_create(panelc); 
+    BotonAplicarEstilo(btnGuardar, "Guardar" , 100,100);     
     lv_obj_add_event_cb(btnGuardar, btnGuardar_click, LV_EVENT_ALL, NULL);            
 
-    lv_obj_t * labelbtnGuardar = lv_label_create(btnGuardar);           
-    lv_label_set_text(labelbtnGuardar, "Guardar");                     
-    lv_obj_center(labelbtnGuardar);
 
 
- //Boton de prueba 
-    lv_obj_t * btnSalir = lv_button_create(panelc());
-    AplicarEstiloBoton(btnSalir, "Salir", 300, 100); 
-     */
+    //Creo un boton Salir y no le asocio ningún evento. A modo de ejemplo. 
+    lv_obj_t * btnSalir = lv_button_create(panelc);
+    BotonAplicarEstilo(btnSalir, "Salir", 100, 300); 
+    
 
 
 };
