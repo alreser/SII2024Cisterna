@@ -12,6 +12,7 @@
 #include "lvgl.h"
 //#include "demos/lv_demos.h"
 #include  "../headers/pantalla.h"
+#include  "../headers/init.h"
 
 #define LCD_WIDTH               800
 #define LCD_HEIGHT              480
@@ -282,6 +283,8 @@ void app_main(void)
     ESP_ERROR_CHECK(esp_timer_start_periodic(lvgl_tick_timer, LVGL_TICK_PERIOD_MS * 1000));
 
     lvgl_mux = xSemaphoreCreateRecursiveMutex();
+    xTaskCreate(lvgl_port_task, "lvgl_port_task", LVGL_TASK_STACK_SIZE, NULL, LVGL_TASK_PRIORITY, NULL);
+    //Creo 
     xTaskCreate(lvgl_port_task, "lvgl_port_task", LVGL_TASK_STACK_SIZE, NULL, LVGL_TASK_PRIORITY, NULL);
 
 
