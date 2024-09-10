@@ -11,7 +11,6 @@
 static void ControlCisterna_task(void *arg)
 {
 
-   
 
    estado.nivelActual = 20000; ///TODO, quitar valores hardcoded
    estado.vertidoHora = 300; 
@@ -22,7 +21,7 @@ static void ControlCisterna_task(void *arg)
    {/// 1. Leo estado de los sensores 
    //2. Consulto los valores configurados por el usuario.
    //3. Calculo las acciones de control (Encendido, apagados de válvulas) 
-   //4. Actualizo el estado del sistema. 
+   //4. Actualizo el estado del sistema.  
    
     /* code */
 
