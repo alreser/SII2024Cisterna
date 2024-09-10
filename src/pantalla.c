@@ -147,6 +147,7 @@ static void CrearTabConfiguracion(lv_obj_t * parent)
 
 
 
+
     //Creo un boton Salir y no le asocio ningún evento. A modo de ejemplo. 
     lv_obj_t * btnSalir = lv_button_create(panelc);
     BotonAplicarEstilo(btnSalir, "Salir", 100, 300); 
