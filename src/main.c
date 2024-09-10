@@ -21,6 +21,8 @@
 
 static const char *TAG = "LVGL";
 
+void ControlCisterna_task(void *arg);
+
 static lv_indev_t * indev_touchpad = NULL;
 
 static void lvgl_disp_flush(lv_display_t * disp, const lv_area_t * area, uint8_t * px_map)
@@ -285,7 +287,7 @@ void app_main(void)
     lvgl_mux = xSemaphoreCreateRecursiveMutex();
     xTaskCreate(lvgl_port_task, "lvgl_port_task", LVGL_TASK_STACK_SIZE, NULL, LVGL_TASK_PRIORITY, NULL);
     //Creo una tareas que realiza el control del estado de la cisterna
-   // xTaskCreate(ControlCisterna_task, "ControlCisterna_task", LVGL_TASK_STACK_SIZE, NULL, 2, NULL);
+    xTaskCreate(ControlCisterna_task, "ControlCisterna_task", LVGL_TASK_STACK_SIZE, NULL, 2, NULL);
 
 
 
