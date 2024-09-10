@@ -8,14 +8,14 @@
 
 
 
-
 static void ControlCisterna_task(void *arg)
 {
 
-   struct st_EstadoCisterna estado; 
+   
 
    estado.nivelActual = 20000; ///TODO, quitar valores hardcoded
    estado.vertidoHora = 300; 
+   
  
 
    while (1)

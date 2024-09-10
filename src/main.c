@@ -284,8 +284,8 @@ void app_main(void)
 
     lvgl_mux = xSemaphoreCreateRecursiveMutex();
     xTaskCreate(lvgl_port_task, "lvgl_port_task", LVGL_TASK_STACK_SIZE, NULL, LVGL_TASK_PRIORITY, NULL);
-    //Creo 
-    xTaskCreate(lvgl_port_task, "lvgl_port_task", LVGL_TASK_STACK_SIZE, NULL, LVGL_TASK_PRIORITY, NULL);
+    //Creo una tareas que realiza el control del estado de la cisterna
+   // xTaskCreate(ControlCisterna_task, "ControlCisterna_task", LVGL_TASK_STACK_SIZE, NULL, 2, NULL);
 
 
 
