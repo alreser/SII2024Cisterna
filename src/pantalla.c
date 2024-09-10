@@ -97,18 +97,35 @@ static void CrearTabOperacion(lv_obj_t * parent)
     lv_obj_align(lblNivel, LV_ALIGN_TOP_LEFT, 10,20);
     lv_obj_add_flag(lblNivel, LV_OBJ_FLAG_IGNORE_LAYOUT);
     lv_obj_add_style(lblNivel, &style_title,0);
-    lv_label_set_text(lblNivel," NIVEL (Lts)");
+    lv_label_set_text(lblNivel," NIVEL TANQUE (Lts)");
     
     
 
     lv_obj_t * txtNivel = lv_textarea_create(panel1); //Creo la caja de textos txtNivel
     lv_textarea_set_one_line(txtNivel, true); //Indico que es de tipo linea simple.
-    lv_obj_set_size(txtNivel, 120,40);
-    lv_obj_set_pos(txtNivel, 150, 10);
+    lv_obj_set_size(txtNivel, 120, 40);
+    lv_obj_set_pos(txtNivel, 160, 10);
     lv_textarea_set_align(txtNivel, LV_TEXT_ALIGN_RIGHT);
-    lv_textarea_set_text(txtNivel, "100"); //TODO : Este valor debe obtenerse de la lectura del nivel del tanque 
+    char nivel[10];
+    itoa(estado.nivelActual,nivel,10);
+    lv_textarea_set_text(txtNivel, nivel); //TODO : Este valor debe obtenerse de la lectura del nivel del tanque 
 
-    
+
+    lv_obj_t * lblConsumo = lv_label_create(panel1); //Creo un Label para mostrar el texto Consumo(Hrs)
+    lv_obj_align(lblConsumo, LV_ALIGN_TOP_LEFT, 10,70);
+    lv_obj_add_flag(lblConsumo, LV_OBJ_FLAG_IGNORE_LAYOUT);
+    lv_obj_add_style(lblConsumo, &style_title,0);
+    lv_label_set_text(lblConsumo,"CONSUMO (Hrs)");
+
+    lv_obj_t * txtConsumo = lv_textarea_create(panel1); //Creo la caja de textos txtConsumo
+    lv_textarea_set_one_line(txtConsumo, true); //Indico que es de tipo linea simple.
+    lv_obj_set_size(txtConsumo, 120, 40);
+    lv_obj_set_pos(txtConsumo, 160, 60);
+    lv_textarea_set_align(txtConsumo, LV_TEXT_ALIGN_RIGHT);
+    char consumo[10];
+    itoa(estado.vertidoHora,consumo,10);
+    lv_textarea_set_text(txtConsumo, consumo); //TODO : Este valor debe obtenerse de la lectura del caudal 
+
 
       
     //lv_obj_set_style_text_font(lblNivelValor, LV_FONT_MONTSERRAT_12, 0);
