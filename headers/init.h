@@ -28,9 +28,36 @@ enum TextBoxEdicionEnum
 
 } ;
 
-/// @brief Tarea que realiza el control de las variables de proceso del sistema
-/// @param arg 
-static void ControlCisterna_task(void *arg);
+struct st_EstadoCisterna
+{
+    int     nivelActual;
+    int     vertidoHora;
+    bool    modoAuto;
+    bool    bombaEncendida;
+
+};
+
+struct st_ParametrosConfiguracion
+{
+    int     nivelMin;   //Mínimo nivel para encender bomba en modo automático
+    int     nivelMax;   //Máximo nivel para apagar bomba en modo automático
+    int     caudalMax;  //Caudal máximo permitivo antes de cerrar el vertido por fuga.
+    int     maxAdmitivo; //Nivel de seguridad máximo permitido en modo Manual   
+    int     nivelAgotamiento;  //  
+
+    
+};
+
+ static struct st_EstadoCisterna estado = 
+ {
+    .bombaEncendida = false,
+    .modoAuto = true, 
+    .nivelActual = 12300, 
+    .vertidoHora = 234
+ };
+
+
+//static void ControlCisterna_task(void *arg);
 
 
 void InicilizarComponentesPantalla() ;//Iniciliza los componentes Graficos de la pantalla

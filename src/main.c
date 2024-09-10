@@ -12,6 +12,7 @@
 #include "lvgl.h"
 //#include "demos/lv_demos.h"
 #include  "../headers/pantalla.h"
+#include  "../headers/init.h"
 
 #define LCD_WIDTH               800
 #define LCD_HEIGHT              480
@@ -19,6 +20,8 @@
 #define LCD_GPIO_BCKL           GPIO_NUM_2
 
 static const char *TAG = "LVGL";
+
+void ControlCisterna_task(void *arg);
 
 static lv_indev_t * indev_touchpad = NULL;
 
@@ -283,6 +286,8 @@ void app_main(void)
 
     lvgl_mux = xSemaphoreCreateRecursiveMutex();
     xTaskCreate(lvgl_port_task, "lvgl_port_task", LVGL_TASK_STACK_SIZE, NULL, LVGL_TASK_PRIORITY, NULL);
+    //Creo una tareas que realiza el control del estado de la cisterna
+    xTaskCreate(ControlCisterna_task, "ControlCisterna_task", LVGL_TASK_STACK_SIZE, NULL, 2, NULL);
 
 
 
