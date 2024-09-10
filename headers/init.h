@@ -56,9 +56,8 @@ struct st_ParametrosConfiguracion
     .vertidoHora = 234
  };
 
-/// @brief Tarea que realiza el control de las variables de proceso del sistema
-/// @param arg 
-static void ControlCisterna_task(void *arg);
+
+//static void ControlCisterna_task(void *arg);
 
 
 void InicilizarComponentesPantalla() ;//Iniciliza los componentes Graficos de la pantalla
