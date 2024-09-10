@@ -43,7 +43,7 @@ struct st_ParametrosConfiguracion
     int     nivelMax;   //Máximo nivel para apagar bomba en modo automático
     int     caudalMax;  //Caudal máximo permitivo antes de cerrar el vertido por fuga.
     int     maxAdmitivo; //Nivel de seguridad máximo permitido en modo Manual   
-    int     nivelAgotamiento;  //  
+    int     nivelAgotamiento;  //nivel de activacion de alarma por agotamiento  
 
     
 };
@@ -54,6 +54,14 @@ struct st_ParametrosConfiguracion
     .modoAuto = true, 
     .nivelActual = 12300, 
     .vertidoHora = 234
+ };
+
+ static struct st_ParametrosConfiguracion configuracion = {
+    .nivelMin = 5000,
+    .nivelMax = 23000,
+    .caudalMax = 3000,
+    .maxAdmitivo = 24000,
+    .nivelAgotamiento = 1000
  };
 
 
