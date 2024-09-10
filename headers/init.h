@@ -28,6 +28,22 @@ enum TextBoxEdicionEnum
 
 } ;
 
+struct st_EstadoCisterna
+{
+    int nivelActual;
+    int vertidoHora;
+};
+
+struct st_ParametrosConfiguracion
+{
+    int nivelMin;
+    int nivelMax; 
+
+    
+};
+
+
+
 /// @brief Tarea que realiza el control de las variables de proceso del sistema
 /// @param arg 
 static void ControlCisterna_task(void *arg);

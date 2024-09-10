@@ -1,3 +1,4 @@
+#include <stdio.h>
 #include <freertos/FreeRTOS.h>
 #include <freertos/task.h>
 
@@ -7,9 +8,15 @@
 
 
 
+
 static void ControlCisterna_task(void *arg)
 {
 
+   struct st_EstadoCisterna estado; 
+
+   estado.nivelActual = 20000; ///TODO, quitar valores hardcoded
+   estado.vertidoHora = 300; 
+ 
 
    while (1)
    {/// 1. Leo estado de los sensores 
@@ -19,7 +26,8 @@ static void ControlCisterna_task(void *arg)
    
     /* code */
 
-    vTaskDelay(1000/ portTICK_PERIOD_MS);
+   printf("Nivel %d  vertidi %d \n", estado.nivelActual, estado.vertidoHora); 
+    vTaskDelay(2000/ portTICK_PERIOD_MS);
    }
     
 }; 
