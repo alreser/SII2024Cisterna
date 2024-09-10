@@ -48,7 +48,13 @@ struct st_ParametrosConfiguracion
     
 };
 
- static struct st_EstadoCisterna estado;
+ static struct st_EstadoCisterna estado = 
+ {
+    .bombaEncendida = false,
+    .modoAuto = true, 
+    .nivelActual = 12300, 
+    .vertidoHora = 234
+ };
 
 /// @brief Tarea que realiza el control de las variables de proceso del sistema
 /// @param arg 
