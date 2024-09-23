@@ -84,8 +84,8 @@ static void CrearTabOperacion(lv_obj_t * parent)
    //creo un plane dentro del Tab que contendrá todos los controles.
     lv_obj_t * panel1 = lv_obj_create(parent);
     lv_obj_set_style_pad_all(panel1,2,0);
-    lv_obj_set_height(panel1, LCD_HEIGHT - tab_h - 20);
-    lv_obj_set_width(panel1, LCD_WIDTH - 30);
+    lv_obj_set_height(panel1, LCD_HEIGHT - tab_h - 40);
+    lv_obj_set_width(panel1, LCD_WIDTH - 40);
     
     
     
@@ -97,18 +97,17 @@ static void CrearTabOperacion(lv_obj_t * parent)
     lv_obj_align(lblNivel, LV_ALIGN_TOP_LEFT, 10,20);
     lv_obj_add_flag(lblNivel, LV_OBJ_FLAG_IGNORE_LAYOUT);
     lv_obj_add_style(lblNivel, &style_title,0);
-    lv_label_set_text(lblNivel," NIVEL TANQUE (Lts)");
+    lv_label_set_text(lblNivel,"NIVEL TANQUE (Lts)");
     
-    
-
     lv_obj_t * txtNivel = lv_textarea_create(panel1); //Creo la caja de textos txtNivel
     lv_textarea_set_one_line(txtNivel, true); //Indico que es de tipo linea simple.
-    lv_obj_set_size(txtNivel, 120, 40);
+    lv_obj_set_size(txtNivel, 120, 42);
     lv_obj_set_pos(txtNivel, 160, 10);
     lv_textarea_set_align(txtNivel, LV_TEXT_ALIGN_RIGHT);
     char nivel[10];
     itoa(estado.nivelActual,nivel,10);
     lv_textarea_set_text(txtNivel, nivel); //TODO : Este valor debe obtenerse de la lectura del nivel del tanque 
+
 
 
     lv_obj_t * lblConsumo = lv_label_create(panel1); //Creo un Label para mostrar el texto Consumo(Hrs)
@@ -119,7 +118,7 @@ static void CrearTabOperacion(lv_obj_t * parent)
 
     lv_obj_t * txtConsumo = lv_textarea_create(panel1); //Creo la caja de textos txtConsumo
     lv_textarea_set_one_line(txtConsumo, true); //Indico que es de tipo linea simple.
-    lv_obj_set_size(txtConsumo, 120, 40);
+    lv_obj_set_size(txtConsumo, 120, 42);
     lv_obj_set_pos(txtConsumo, 160, 60);
     lv_textarea_set_align(txtConsumo, LV_TEXT_ALIGN_RIGHT);
     char consumo[10];
@@ -150,24 +149,106 @@ static void CrearTabOperacion(lv_obj_t * parent)
 static void CrearTabConfiguracion(lv_obj_t * parent)
 {
     // Creo el panel donde estarán todos los controles (TextBox, Botones, etc.)
-    lv_obj_t * panelc = lv_obj_create(parent);
-    lv_obj_set_style_pad_all(panelc,2,0);
-    lv_obj_set_height(panelc, LCD_HEIGHT - tab_h - 20);
-    lv_obj_set_width(panelc, LCD_WIDTH - 30);
+    lv_obj_t * panel2 = lv_obj_create(parent);
+    lv_obj_set_style_pad_all(panel2,2,0);
+    lv_obj_set_height(panel2, LCD_HEIGHT - tab_h - 40);
+    lv_obj_set_width(panel2, LCD_WIDTH - 40);
+
+
+
+    lv_obj_t * lblNivelMin = lv_label_create(panel2); //Creo un Label para mostrar el texto NIVEL MINIMO
+    lv_obj_align(lblNivelMin, LV_ALIGN_TOP_LEFT, 70,75);
+    lv_obj_add_flag(lblNivelMin, LV_OBJ_FLAG_IGNORE_LAYOUT);
+    lv_obj_add_style(lblNivelMin, &style_title,0);
+    lv_label_set_text(lblNivelMin,"NIVEL MINIMO");
+
+    lv_obj_t * txtNivelMin = lv_textarea_create(panel2); //Creo la caja de textos txtNivel
+    lv_textarea_set_one_line(txtNivelMin, true); //Indico que es de tipo linea simple.
+    lv_obj_set_size(txtNivelMin, 120, 42); //Tamaño de caja de texto
+    lv_obj_set_pos(txtNivelMin, 210, 62); //Posicion de caja de texto, +140 en X, -13 en Y (para alinear al texto plano)
+    lv_textarea_set_align(txtNivelMin, LV_TEXT_ALIGN_RIGHT);
+    lv_textarea_set_text(txtNivelMin, "001"); //TODO : Este valor debe obtenerse de la lectura del nivel del tanque 
+
+
+
+    lv_obj_t * lblNivelMax = lv_label_create(panel2); //Creo un Label para mostrar el texto NIVEL MAXIMO
+    lv_obj_align(lblNivelMax, LV_ALIGN_TOP_LEFT, 70,175);
+    lv_obj_add_flag(lblNivelMax, LV_OBJ_FLAG_IGNORE_LAYOUT);
+    lv_obj_add_style(lblNivelMax, &style_title,0);
+    lv_label_set_text(lblNivelMax,"NIVEL MAXIMO");
+
+    lv_obj_t * txtNivelMax = lv_textarea_create(panel2); //Creo la caja de textos txtNivel
+    lv_textarea_set_one_line(txtNivelMax, true); //Indico que es de tipo linea simple.
+    lv_obj_set_size(txtNivelMax, 120, 42); //Tamaño de caja de texto
+    lv_obj_set_pos(txtNivelMax, 210, 162); //Posicion de caja de texto, +140 en X, -13) en Y (para alinear al texto plano)
+    lv_textarea_set_align(txtNivelMax, LV_TEXT_ALIGN_RIGHT);
+    lv_textarea_set_text(txtNivelMax, "002"); //TODO : Este valor debe obtenerse de la lectura del nivel del tanque 
+
+
+
+    lv_obj_t * lblCaudalMax = lv_label_create(panel2); //Creo un Label para mostrar el texto CAUDAL MAXIMO
+    lv_obj_align(lblCaudalMax, LV_ALIGN_TOP_LEFT, 70,275);
+    lv_obj_add_flag(lblCaudalMax, LV_OBJ_FLAG_IGNORE_LAYOUT);
+    lv_obj_add_style(lblCaudalMax, &style_title,0);
+    lv_label_set_text(lblCaudalMax,"CAUDAL MAXIMO");
+
+    lv_obj_t * txtCaudalMax = lv_textarea_create(panel2); //Creo la caja de textos txtNivel
+    lv_textarea_set_one_line(txtCaudalMax, true); //Indico que es de tipo linea simple.
+    lv_obj_set_size(txtCaudalMax, 120, 42); //Tamaño de caja de texto
+    lv_obj_set_pos(txtCaudalMax, 210, 262); //Posicion de caja de texto, +140 en X, -13) en Y (para alinear al texto plano)
+    lv_textarea_set_align(txtCaudalMax, LV_TEXT_ALIGN_RIGHT);
+    lv_textarea_set_text(txtCaudalMax, "003"); //TODO : Este valor debe obtenerse de la lectura del nivel del tanque 
+
+
+
+    lv_obj_t * lblMinAbsoluto = lv_label_create(panel2); //Creo un Label para mostrar el texto MINIMO ABSOLUTO
+    lv_obj_align(lblMinAbsoluto, LV_ALIGN_TOP_LEFT, 400,75);
+    lv_obj_add_flag(lblMinAbsoluto, LV_OBJ_FLAG_IGNORE_LAYOUT);
+    lv_obj_add_style(lblMinAbsoluto, &style_title,0);
+    lv_label_set_text(lblMinAbsoluto,"MINIMO ABSOLUTO");
+
+    lv_obj_t * txtMinAbsoluto = lv_textarea_create(panel2); //Creo la caja de textos txtNivel
+    lv_textarea_set_one_line(txtMinAbsoluto, true); //Indico que es de tipo linea simple.
+    lv_obj_set_size(txtMinAbsoluto, 120, 42); //Tamaño de caja de texto
+    lv_obj_set_pos(txtMinAbsoluto, 555, 62); //Posicion de caja de texto, +155 en X, -13 en Y (para alinear al texto plano)
+    lv_textarea_set_align(txtMinAbsoluto, LV_TEXT_ALIGN_RIGHT);
+    lv_textarea_set_text(txtMinAbsoluto, "004"); //TODO : Este valor debe obtenerse de la lectura del nivel del tanque 
+
+
+
+    lv_obj_t * lblMaxAbsoluto = lv_label_create(panel2); //Creo un Label para mostrar el texto MAXIMO ABSOLUTO
+    lv_obj_align(lblMaxAbsoluto, LV_ALIGN_TOP_LEFT, 400,175);
+    lv_obj_add_flag(lblMaxAbsoluto, LV_OBJ_FLAG_IGNORE_LAYOUT);
+    lv_obj_add_style(lblMaxAbsoluto, &style_title,0);
+    lv_label_set_text(lblMaxAbsoluto,"MAXIMO ABSOLUTO");
+
+    lv_obj_t * txtMaxAbsoluto = lv_textarea_create(panel2); //Creo la caja de textos txtNivel
+    lv_textarea_set_one_line(txtMaxAbsoluto, true); //Indico que es de tipo linea simple.
+    lv_obj_set_size(txtMaxAbsoluto, 120, 42); //Tamaño de caja de texto
+    lv_obj_set_pos(txtMaxAbsoluto, 555, 162); //Posicion de caja de texto, +155 en X, -13) en Y (para alinear al texto plano)
+    lv_textarea_set_align(txtMaxAbsoluto, LV_TEXT_ALIGN_RIGHT);
+    lv_textarea_set_text(txtMaxAbsoluto, "005"); //TODO : Este valor debe obtenerse de la lectura del nivel del tanque 
+
+
+
+
+
+
+
 
 
 
     //Creo un primero boton y lo asocio a un evento 
-    lv_obj_t * btnGuardar = lv_button_create(panelc); 
-    BotonAplicarEstilo(btnGuardar, "Guardar" , 100,100);     
+    lv_obj_t * btnGuardar = lv_button_create(panel2); 
+    BotonAplicarEstilo(btnGuardar, "Guardar" , 640,0);     
     lv_obj_add_event_cb(btnGuardar, btnGuardar_click, LV_EVENT_ALL, NULL);            
 
 
 
 
     //Creo un boton Salir y no le asocio ningún evento. A modo de ejemplo. 
-    lv_obj_t * btnSalir = lv_button_create(panelc);
-    BotonAplicarEstilo(btnSalir, "Salir", 100, 300); 
+    lv_obj_t * btnSalir = lv_button_create(panel2);
+    BotonAplicarEstilo(btnSalir, "Salir", 640, 310); 
     
 
 
