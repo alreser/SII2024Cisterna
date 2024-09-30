@@ -9,11 +9,14 @@ static void btnGuardar_click(lv_event_t * e)
     lv_obj_t * btn = lv_event_get_target(e);
     if(code == LV_EVENT_CLICKED) {
         static uint8_t cnt = 0;
-        cnt++;
+     estado.nivelActual++;
+       cnt++;
+
+        //actualizo el control en pantalla. 
 
         /*Get the first child of the button which is the label and change its text*/
         lv_obj_t * label = lv_obj_get_child(btn, 0);
-        lv_label_set_text_fmt(label, "Guardar Nro: %d", cnt);
+        lv_label_set_text_fmt(label, "Guardar Nro: %d", estado.nivelActual);
 
     }
 };
