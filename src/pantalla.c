@@ -93,7 +93,7 @@ static void CrearTabOperacion(lv_obj_t * parent)
 
     //Nivel tanque 
     lv_obj_t * lblNivel = lv_label_create(panel1); //Creo un Label para mostrar el texto Nivel del Tanque(Lts)
-   
+    
     lv_obj_align(lblNivel, LV_ALIGN_TOP_LEFT, 10,20);
     lv_obj_add_flag(lblNivel, LV_OBJ_FLAG_IGNORE_LAYOUT);
     lv_obj_add_style(lblNivel, &style_title,0);
@@ -126,7 +126,7 @@ static void CrearTabOperacion(lv_obj_t * parent)
     lv_textarea_set_text(txtConsumo, consumo); //TODO : Este valor debe obtenerse de la lectura del caudal 
 
 
-      
+
     //lv_obj_set_style_text_font(lblNivelValor, LV_FONT_MONTSERRAT_12, 0);
 
 /* 
@@ -138,7 +138,7 @@ static void CrearTabOperacion(lv_obj_t * parent)
     
     //A modo de ejemplo creo un boton y le asigno los estilos por defecto que cree dentro de la funcion AplicarEstiloBoton
     lv_obj_t * btnSalir = lv_button_create(panel1); //Creo el objeto como hijo del padre=>Tab
-    BotonAplicarEstilo(btnSalir, "Salir", LCD_WIDTH-150, 300); //Aplico el estilo por defecto que hemos definido para los botones
+    BotonAplicarEstilo(btnSalir, "Salir", LCD_WIDTH-200, 250); //Aplico el estilo por defecto que hemos definido para los botones
 
 };
 
