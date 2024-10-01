@@ -27,6 +27,15 @@ static void btnGuardar_click(lv_event_t * e)
 };
 
 
+static void automanual_event(lv_event_t * e)
+{
+    lv_event_code_t code = lv_event_get_code(e);
+    lv_obj_t * obj = lv_event_get_target(e);
+    if(code == LV_EVENT_VALUE_CHANGED) {
+        LV_UNUSED(obj);
+    }
+}
+
 
 void PantallaPrincipal(void)
 {
@@ -148,6 +157,16 @@ static void CrearTabOperacion(lv_obj_t * parent)
     //A modo de ejemplo creo un boton y le asigno los estilos por defecto que cree dentro de la funcion AplicarEstiloBoton
     lv_obj_t * btnSalir = lv_button_create(panel1); //Creo el objeto como hijo del padre=>Tab
     BotonAplicarEstilo(btnSalir, "Salir", LCD_WIDTH-200, 250); //Aplico el estilo por defecto que hemos definido para los botones
+
+
+    lv_obj_t * swAutoManual; //Creo switch
+    swAutoManual = lv_switch_create(panel1);
+    lv_obj_add_event_cb(swAutoManual, automanual_event, LV_EVENT_ALL, NULL);
+    lv_obj_add_flag(swAutoManual, LV_OBJ_FLAG_EVENT_BUBBLE);
+    lv_obj_add_state(swAutoManual, LV_STATE_CHECKED);
+    lv_obj_align(swAutoManual, LV_ALIGN_TOP_LEFT, 400,100);
+
+
 
 };
 
