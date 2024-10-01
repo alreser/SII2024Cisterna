@@ -9,7 +9,7 @@ static void btnGuardar_click(lv_event_t * e)
     lv_obj_t * btn = lv_event_get_target(e);
     if(code == LV_EVENT_CLICKED) {
         static uint8_t cnt = 0;
-     estado.nivelActual++;
+     estado.nivelActual++; 
        cnt++;
 
         //actualizo el control en pantalla. 
