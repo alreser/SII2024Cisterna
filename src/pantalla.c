@@ -153,6 +153,7 @@ static void CrearTabOperacion(lv_obj_t * parent)
 
 
 
+
 /// @brief Función que crea el contenido del TAB Configuración
 /// @param parent 
 static void CrearTabConfiguracion(lv_obj_t * parent)
