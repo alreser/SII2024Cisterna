@@ -10,7 +10,12 @@ static void btnGuardar_click(lv_event_t * e)
     if(code == LV_EVENT_CLICKED) {
         static uint8_t cnt = 0;
      estado.nivelActual++; 
+     
+      char nivel[10];
+     itoa(estado.nivelActual,nivel,10);
+     lv_textarea_set_text( estado.pnivelActual, nivel);
        cnt++;
+       
 
         //actualizo el control en pantalla. 
 
@@ -103,6 +108,7 @@ static void CrearTabOperacion(lv_obj_t * parent)
     lv_label_set_text(lblNivel,"NIVEL TANQUE (Lts)");
     
     lv_obj_t * txtNivel = lv_textarea_create(panel1); //Creo la caja de textos txtNivel
+    estado.pnivelActual = txtNivel; // paso puntero del onjecto creado. 
     lv_textarea_set_one_line(txtNivel, true); //Indico que es de tipo linea simple.
     lv_obj_set_size(txtNivel, 120, 42);
     lv_obj_set_pos(txtNivel, 160, 10);

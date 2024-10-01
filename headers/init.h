@@ -31,6 +31,7 @@ enum TextBoxEdicionEnum
 struct st_EstadoCisterna
 {
     int     nivelActual;
+    lv_obj_t * pnivelActual;
     int     vertidoHora;
     bool    modoAuto;
     bool    bombaEncendida;
