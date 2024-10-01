@@ -301,6 +301,7 @@ void app_main(void)
 
     if (lvgl_lock(-1))
     {
+        
         //lv_demo_widgets();
         PantallaPrincipal();
         lvgl_unlock();
