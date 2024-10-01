@@ -22,10 +22,10 @@
    //4. Actualizo el estado del sistema.  
    
     /* code */
-   estado.vertidoHora++;
+   estado.nivelActual++;
    //TODO: QUITAR ESTE CODIGO DE PRUEBAS 
-   if (estado.nivelActual == 32100) estado.nivelActual = 20000; 
-   estado.nivelActual+=100;
+   if (estado.nivelActual == 32100) estado.nivelActual = 10000; 
+   //estado.nivelActual+=100;
 
     printf("Nivel %d  vertidi %d \n", estado.nivelActual, estado.vertidoHora); 
     vTaskDelay(2000/ portTICK_PERIOD_MS);
