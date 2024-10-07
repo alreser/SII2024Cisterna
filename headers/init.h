@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <lvgl.h>
 
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -19,6 +20,7 @@ static lv_style_t style_title; //Estilo de los titulos de la aplicacion
 static lv_style_t style_text_Normal; //Estilo de los textos normales de etiquetas 
 static lv_style_t style_text_muted; // Estilo texto apagado
 
+
 enum TextBoxEdicionEnum
 {   
     Deshabilitado =0,  //El TextBox aparrecerá deshabilitadao
@@ -36,7 +38,7 @@ struct st_EstadoCisterna
     bool    modoAuto;
     bool    bombaEncendida;
 
-};
+} ;
 
 struct st_ParametrosConfiguracion
 {
@@ -49,22 +51,15 @@ struct st_ParametrosConfiguracion
     
 };
 
- static struct st_EstadoCisterna estado = 
- {
-    .bombaEncendida = false,
-    .modoAuto = true, 
-    .nivelActual = 12300, 
-    .vertidoHora = 234
- };
+struct st_ControlesPantallaOperacion
+{
+    lv_obj_t * pNivelTanque;
+    lv_obj_t * pConsumo;
+} ;
 
- static struct st_ParametrosConfiguracion configuracion = {
-    .nivelMin = 5000,
-    .nivelMax = 23000,
-    .caudalMax = 3000,
-    .maxAdmitivo = 24000,
-    .nivelAgotamiento = 1000
- };
 
+
+void ActualizarValoresTabOperacion();
 
 //static void ControlCisterna_task(void *arg);
 

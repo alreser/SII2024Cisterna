@@ -2,6 +2,37 @@
 #include <../headers/init.h>
 #include <lvgl.h>
 
+extern struct st_EstadoCisterna estado;
+struct st_ControlesPantallaOperacion ControlesPantallaOperacion = {
+    .pNivelTanque = NULL,
+    .pConsumo = NULL
+};
+lv_obj_t * tabOperacion;
+lv_obj_t * tabConfiguracion; 
+
+void ActualizaValoresPantallas_task(void *arg)
+{
+    vTaskDelay(3000 / portTICK_PERIOD_MS);
+
+while (1)
+{// cada 1 segundo actualizo los valores de las pantallas
+    if (ControlesPantallaOperacion.pNivelTanque != NULL && ControlesPantallaOperacion.pNivelTanque != NULL) 
+    {
+        ActualizarValoresTabOperacion();
+        printf("Dentro de la tarea actualiza Pantalla"); 
+
+    }
+    vTaskDelay(500/ portTICK_PERIOD_MS); 
+    
+
+}
+
+
+}
+
+
+
+
 
 static void btnGuardar_click(lv_event_t * e)
 {
@@ -16,12 +47,15 @@ static void btnGuardar_click(lv_event_t * e)
      lv_textarea_set_text( estado.pnivelActual, nivel);
        cnt++;
        
+     //cambio el tab activo 
+     lv_tabview_set_active(tabOperacion, 0, LV_ANIM_ON)  ;
 
         //actualizo el control en pantalla. 
 
         /*Get the first child of the button which is the label and change its text*/
         lv_obj_t * label = lv_obj_get_child(btn, 0);
         lv_label_set_text_fmt(label, "Guardar Nro: %d", estado.nivelActual);
+        printf("Boton ejecutado en puntero a nivel [%p] valor [%d]\n",  &estado.nivelActual, estado.nivelActual);
 
     }
 };
@@ -37,7 +71,7 @@ static void automanual_event(lv_event_t * e)
 }
 
 
-void PantallaPrincipal(void)
+void PantallaPrincipal()
 {
    
     InicilizarComponentesPantalla();
@@ -52,9 +86,11 @@ void PantallaPrincipal(void)
     //ATENCION: FALTA AGREGAR EVENTO AL TABVIEW
     //lv_obj_add_event_cb(tv, tabview_delete_event_cb, LV_EVENT_DELETE, NULL);
     //Agrego dos tabs al tabview
-    lv_obj_t * tabOperacion = lv_tabview_add_tab(tabView, "OPERACION");
-    lv_obj_t * tabConfiguracion = lv_tabview_add_tab(tabView, "CONFIGURACION");
-
+    
+    //lv_obj_t * tabOperacion = lv_tabview_add_tab(tabView, "OPERACION");
+    tabOperacion = lv_tabview_add_tab(tabView, "OPERACION");
+   // lv_obj_t * tabConfiguracion = lv_tabview_add_tab(tabView, "CONFIGURACION");
+    tabConfiguracion = lv_tabview_add_tab(tabView, "CONFIGURACION");
     
     //Creo la cabecera del TABView 
         lv_obj_t * tab_bar = lv_tabview_get_tab_bar(tabView);
@@ -115,6 +151,8 @@ static void CrearTabOperacion(lv_obj_t * parent)
     lv_obj_add_flag(lblNivel, LV_OBJ_FLAG_IGNORE_LAYOUT);
     lv_obj_add_style(lblNivel, &style_title,0);
     lv_label_set_text(lblNivel,"NIVEL TANQUE (Lts)");
+   
+
     
     lv_obj_t * txtNivel = lv_textarea_create(panel1); //Creo la caja de textos txtNivel
     estado.pnivelActual = txtNivel; // paso puntero del onjecto creado. 
@@ -125,7 +163,7 @@ static void CrearTabOperacion(lv_obj_t * parent)
     char nivel[10];
     itoa(estado.nivelActual,nivel,10);
     lv_textarea_set_text(txtNivel, nivel); //TODO : Este valor debe obtenerse de la lectura del nivel del tanque 
-
+     ControlesPantallaOperacion.pNivelTanque = txtNivel; //guardo el puntero a al txtBox para posterior actualizacion
 
 
     lv_obj_t * lblConsumo = lv_label_create(panel1); //Creo un Label para mostrar el texto Consumo(Hrs)
@@ -142,7 +180,7 @@ static void CrearTabOperacion(lv_obj_t * parent)
     char consumo[10];
     itoa(estado.vertidoHora,consumo,10);
     lv_textarea_set_text(txtConsumo, consumo); //TODO : Este valor debe obtenerse de la lectura del caudal 
-
+    ControlesPantallaOperacion.pConsumo = txtConsumo; //almeceno puntero a txtConsumo para posterior actualizacion
 
 
     //lv_obj_set_style_text_font(lblNivelValor, LV_FONT_MONTSERRAT_12, 0);
@@ -279,6 +317,7 @@ static void CrearTabConfiguracion(lv_obj_t * parent)
     lv_obj_t * btnSalir = lv_button_create(panel2);
     BotonAplicarEstilo(btnSalir, "Salir", 640, 310); 
     
+
 
 
 };

@@ -21,6 +21,22 @@
 
 static const char *TAG = "LVGL";
 
+ struct st_EstadoCisterna estado = 
+ {
+    .bombaEncendida = false,
+    .modoAuto = true, 
+    .nivelActual = 100, 
+    .vertidoHora = 234
+ } ;
+
+  struct st_ParametrosConfiguracion configuracion = {
+    .nivelMin = 5000,
+    .nivelMax = 23000,
+    .caudalMax = 3000,
+    .maxAdmitivo = 24000,
+    .nivelAgotamiento = 1000
+ };
+
 void ControlCisterna_task(void *arg);
 
 static lv_indev_t * indev_touchpad = NULL;
@@ -240,8 +256,7 @@ static void lvgl_port_task(void *arg)
     }
 }
 
-
-
+ 
 
 void app_main(void)
 {
@@ -286,10 +301,13 @@ void app_main(void)
 
     lvgl_mux = xSemaphoreCreateRecursiveMutex();
     xTaskCreate(lvgl_port_task, "lvgl_port_task", LVGL_TASK_STACK_SIZE, NULL, LVGL_TASK_PRIORITY, NULL);
-    //Creo una tareas que realiza el control del estado de la cisterna
-    xTaskCreate(ControlCisterna_task, "ControlCisterna_task", LVGL_TASK_STACK_SIZE, NULL, 2, NULL);
+    
+    //Creo una tareas que realiza el control del estado de la cisterna'
+    xTaskCreatePinnedToCore(ControlCisterna_task, "ControlCisterna_task", 2048, NULL, 2, NULL,1);
 
-
+    //creo una tarea que actualiza las pantallas refrescando los valores de operacion del sistema 
+    //Se crea en otro core para evitar el wathdog time out
+    //xTaskCreatePinnedToCore(ActualizaValoresPantallas_task, "ActualizaValoresPantallas_task",  LVGL_TASK_STACK_SIZE, NULL, 2, NULL,1);
 
 
     // init touch i2c bus

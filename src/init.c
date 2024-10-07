@@ -3,6 +3,9 @@
 #include "src/draw/sw/lv_draw_sw_gradient.h"
 #include <../headers/init.h>
 
+extern struct st_EstadoCisterna estado;
+extern struct st_ControlesPantallaOperacion ControlesPantallaOperacion;
+
 
 /// @brief Funcion que recibe un objeto Boton y le aplica estilos predefinidos para toda la aplicacion
 /// @param objBoton  Puntero al onbjeto Botón. 
@@ -80,3 +83,25 @@ void TextBoxAplicarEstilo(lv_obj_t * objTextBox, enum TextBoxEdicionEnum Editabl
 
 };
 
+extern void  ActualizarValoresTabOperacion()
+{
+    printf("Entra en ActualizarValoresIoperaci\n");
+    if (ControlesPantallaOperacion.pNivelTanque != NULL && ControlesPantallaOperacion.pConsumo != NULL)
+    {
+
+    char nivel[10];
+     itoa(estado.nivelActual,nivel,10);
+     lv_textarea_set_text( ControlesPantallaOperacion.pNivelTanque, nivel);
+
+
+    char consumo[10];
+     itoa(estado.vertidoHora ,consumo,10);
+     lv_textarea_set_text( ControlesPantallaOperacion.pConsumo, consumo);
+
+     printf("Dentro de ActualizarValoresTabOperacion\n");
+
+    }
+     
+
+
+};

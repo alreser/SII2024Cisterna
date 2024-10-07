@@ -2,17 +2,14 @@
 #include <freertos/FreeRTOS.h>
 #include <freertos/task.h>
 
+
 #include <../headers/init.h>
 
-
+extern struct st_EstadoCisterna estado;
 
  void ControlCisterna_task(void *arg)
 {
 
-
-   //estado.nivelActual = 20000; ///TODO, quitar valores hardcoded
-   //estado.vertidoHora = 300; 
-   
 
 
    while (1)
@@ -22,15 +19,19 @@
    //4. Actualizo el estado del sistema.  
    
     /* code */
+   
    estado.nivelActual++;
+
    //TODO: QUITAR ESTE CODIGO DE PRUEBAS 
    if (estado.nivelActual == 32100) estado.nivelActual = 10000; 
+   
    //estado.nivelActual+=100;
 
-    printf("Nivel %d  vertidi %d \n", estado.nivelActual, estado.vertidoHora); 
+    printf("Control Cisterna Task ->Nivel %d  puntero nivel %p \n", estado.nivelActual, &estado.nivelActual); 
     vTaskDelay(2000/ portTICK_PERIOD_MS);
+    ActualizarValoresTabOperacion();
    }
-    
+   
 }; 
 
 

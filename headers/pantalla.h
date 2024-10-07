@@ -5,9 +5,11 @@ extern "C" {
 #endif
 
 
-void PantallaPrincipal(void);
+void PantallaPrincipal();
 static void CrearTabOperacion(lv_obj_t * parent);
 static void CrearTabConfiguracion(lv_obj_t * parent);
+void ActualizaValoresPantallas_task(void *arg);
+
 
 
 #ifdef __cplusplus
