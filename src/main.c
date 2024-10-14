@@ -20,13 +20,13 @@
 #define LCD_GPIO_BCKL           GPIO_NUM_2
 
 static const char *TAG = "LVGL";
-
+//estructura que contiene los datos del estado actual de la cisterna
  struct st_EstadoCisterna estado = 
  {
     .bombaEncendida = false,
-    .modoAuto = true, 
+    .modoAuto = false, 
     .nivelActual = 100, 
-    .vertidoHora = 234
+    .vertidoHora = 230
  } ;
 
   struct st_ParametrosConfiguracion configuracion = {
@@ -37,7 +37,7 @@ static const char *TAG = "LVGL";
     .nivelAgotamiento = 1000
  };
 
-void ControlCisterna_task(void *arg);
+extern void ControlCisterna_task(void *arg);
 
 static lv_indev_t * indev_touchpad = NULL;
 
@@ -299,16 +299,9 @@ void app_main(void)
     ESP_ERROR_CHECK(esp_timer_create(&lvgl_tick_timer_args, &lvgl_tick_timer));
     ESP_ERROR_CHECK(esp_timer_start_periodic(lvgl_tick_timer, LVGL_TICK_PERIOD_MS * 1000));
 
-    lvgl_mux = xSemaphoreCreateRecursiveMutex();
+    lvgl_mux = xSemaphoreCreateRecursiveMutex(); 
     xTaskCreate(lvgl_port_task, "lvgl_port_task", LVGL_TASK_STACK_SIZE, NULL, LVGL_TASK_PRIORITY, NULL);
     
-    //Creo una tareas que realiza el control del estado de la cisterna'
-    xTaskCreatePinnedToCore(ControlCisterna_task, "ControlCisterna_task", 2048, NULL, 2, NULL,1);
-
-    //creo una tarea que actualiza las pantallas refrescando los valores de operacion del sistema 
-    //Se crea en otro core para evitar el wathdog time out
-    //xTaskCreatePinnedToCore(ActualizaValoresPantallas_task, "ActualizaValoresPantallas_task",  LVGL_TASK_STACK_SIZE, NULL, 2, NULL,1);
-
 
     // init touch i2c bus
     esp_lcd_touch_handle_t touch_handle = lvgl_touch_init();
@@ -323,6 +316,12 @@ void app_main(void)
         //lv_demo_widgets();
         PantallaPrincipal();
         lvgl_unlock();
+        // TODO: Cargar valores de configuracion y estado de operacion desde el almacenamiento NVS
     }
     
+        //Creo una tareas que realiza el control del estado de la cisterna. Se ejecuta en el core 1
+    xTaskCreatePinnedToCore(ControlCisterna_task, "ControlCisterna_task", 2048, NULL, 3, NULL,1);
+
+
+
 }

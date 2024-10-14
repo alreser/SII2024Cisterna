@@ -3,60 +3,108 @@
 #include <lvgl.h>
 
 extern struct st_EstadoCisterna estado;
+extern bool lvgl_lock(int timeout_ms);
+extern void lvgl_unlock(void);
+
+TimerHandle_t timerPantalla; 
+
 struct st_ControlesPantallaOperacion ControlesPantallaOperacion = {
     .pNivelTanque = NULL,
-    .pConsumo = NULL
+    .pConsumo = NULL,
+    .pAutoMan = false
 };
-lv_obj_t * tabOperacion;
-lv_obj_t * tabConfiguracion; 
+lv_obj_t * tabOperacion; //Puntero a ibjeto TAB de valores de Operacion
+lv_obj_t * tabConfiguracion;  //Puntero a TAB de Valores de configuracion del sistema
+lv_obj_t * tabView; //Punto a TABVIEW principal de la aplicacion
 
-void ActualizaValoresPantallas_task(void *arg)
+lv_obj_t * kbNumeric;// puntero al teclado numerico.
+
+//Actualiza los controles de la pantalla con los valores de estado del sistema de control de cisterna
+void  ActualizarValoresTabOperacion()
 {
-    vTaskDelay(3000 / portTICK_PERIOD_MS);
+       
+   //printf("Entra en ActualizarValoresIoperaci\n");
 
-while (1)
-{// cada 1 segundo actualizo los valores de las pantallas
-    if (ControlesPantallaOperacion.pNivelTanque != NULL && ControlesPantallaOperacion.pNivelTanque != NULL) 
-    {
-        ActualizarValoresTabOperacion();
-        printf("Dentro de la tarea actualiza Pantalla"); 
+    if (ControlesPantallaOperacion.pNivelTanque != NULL && ControlesPantallaOperacion.pConsumo != NULL)
+    {   //Si el MUTEX  esta libre realizo actualizo los valores usando la libreria LVGL.  
+       if ( lvgl_lock(-1))
+       {
+            char nivel[10];
+            itoa(estado.nivelActual,nivel,10);
+            lv_textarea_set_text( ControlesPantallaOperacion.pNivelTanque, nivel);
+
+
+            char consumo[10];
+            itoa(estado.vertidoHora ,consumo,10);
+            lv_textarea_set_text( ControlesPantallaOperacion.pConsumo, consumo);
+            lvgl_unlock(); //Libero el mutex
+       }
+    // printf("Dentro de ActualizarValoresTabOperacion\n");
 
     }
-    vTaskDelay(500/ portTICK_PERIOD_MS); 
-    
+   
+};
 
+
+static void keyboard_event_handler(lv_event_t * e){
+
+	lv_obj_t * obj = lv_event_get_target(e);
+	lv_keyboard_t * kb = (lv_keyboard_t *)obj;
+	const char * txt = lv_keyboard_get_button_text(kb, lv_keyboard_get_selected_button(obj));
+
+    printf("Presiono el boton [%s]", txt);
+	if(strcmp(txt, LV_SYMBOL_OK) == 0) {
+		printf("boton ok...");
+        lv_obj_add_flag(obj, LV_OBJ_FLAG_HIDDEN); // Oculto el teclado ante el OK
+		//lv_event_send(kb->ta, LV_EVENT_READY, NULL);
+	};
 }
 
 
+/// @brief funcion de control de eventos de los TextArea
+/// @param e 
+static void ta_event_cb(lv_event_t * e){
+    lv_event_code_t code = lv_event_get_code(e);
+    lv_obj_t * ta = lv_event_get_target(e);
+    lv_obj_t * kb = lv_event_get_user_data(e);
+    if(code == LV_EVENT_FOCUSED) {
+        lv_keyboard_set_textarea(kb,ta); 
+        lv_obj_remove_flag(kb,LV_OBJ_FLAG_HIDDEN); 
+        //De acuardo al textarea que solicita el keyboard asigno la posicion en pantalla 
+            if (lv_obj_get_x(ta) < (LCD_WIDTH/2)){
+                //el control esta del lado izquierdo 
+                printf("Izq Posicion del control que llama [x,y]=[%" PRId32 "\n,%" PRId32 "\n]", lv_obj_get_x(ta), lv_obj_get_y(ta));
+                lv_obj_set_pos(kbNumeric,180,-10); 
+                 
+            }
+            else{
+                // esta del lado derecho 
+                printf("der Posicion del control que llama [x,y]=[%" PRId32 "\n,%" PRId32 "\n]", lv_obj_get_x(ta), lv_obj_get_y(ta));
+                lv_obj_set_pos(kbNumeric,-180,-10);
+            }
+       // lv_obj_set_pos(kbNumeric,200,200);
+
+    }else if(code == LV_EVENT_DEFOCUSED){
+         lv_keyboard_set_textarea(kb,NULL); 
+        lv_obj_add_flag(kb,LV_OBJ_FLAG_HIDDEN); 
+
+    }
+
 }
 
-
-
-
-
+//Evento que guarda la configuracion ingresada por el usuario 
 static void btnGuardar_click(lv_event_t * e)
 {
     lv_event_code_t code = lv_event_get_code(e);
-    lv_obj_t * btn = lv_event_get_target(e);
+    lv_obj_t * btn = lv_event_get_target(e); //obtengo puntero al objeto que lanza el evento.
     if(code == LV_EVENT_CLICKED) {
-        static uint8_t cnt = 0;
-     estado.nivelActual++; 
+        
+    //TODO: Verificar y almacenar los valores introdicidos por el usuario en el NVS del esp32
      
-      char nivel[10];
-     itoa(estado.nivelActual,nivel,10);
-     lv_textarea_set_text( estado.pnivelActual, nivel);
-       cnt++;
        
-     //cambio el tab activo 
-     lv_tabview_set_active(tabOperacion, 0, LV_ANIM_ON)  ;
 
         //actualizo el control en pantalla. 
-
-        /*Get the first child of the button which is the label and change its text*/
-        lv_obj_t * label = lv_obj_get_child(btn, 0);
-        lv_label_set_text_fmt(label, "Guardar Nro: %d", estado.nivelActual);
-        printf("Boton ejecutado en puntero a nivel [%p] valor [%d]\n",  &estado.nivelActual, estado.nivelActual);
-
+        ActualizarValoresTabOperacion();
     }
 };
 
@@ -67,6 +115,9 @@ static void automanual_event(lv_event_t * e)
     lv_obj_t * obj = lv_event_get_target(e);
     if(code == LV_EVENT_VALUE_CHANGED) {
         LV_UNUSED(obj);
+
+        
+    
     }
 }
 
@@ -80,7 +131,7 @@ void PantallaPrincipal()
     lv_obj_set_style_bg_color(lv_screen_active(), lv_color_hex(0x080808), LV_PART_MAIN);
 
     //Creo el componente TabView
-    lv_obj_t * tabView;
+   
     tabView = lv_tabview_create(lv_screen_active());
     //lv_tabview_set_tab_bar_size(tabView, LCD_WIDTH);
     //ATENCION: FALTA AGREGAR EVENTO AL TABVIEW
@@ -122,7 +173,13 @@ void PantallaPrincipal()
     CrearTabOperacion(tabOperacion);
     CrearTabConfiguracion(tabConfiguracion);
 
+  
 
+    //POngo un Timmer para que se actilicen los controles de pantalla con los valores de estado cargados 
+    //en la estractura estado
+
+    timerPantalla = xTimerCreate("ActualizarValoresTabOperacion", pdMS_TO_TICKS(500), pdTRUE, NULL, ActualizarValoresTabOperacion);
+    xTimerStart(timerPantalla, 0);
 
     
 };
@@ -155,7 +212,6 @@ static void CrearTabOperacion(lv_obj_t * parent)
 
     
     lv_obj_t * txtNivel = lv_textarea_create(panel1); //Creo la caja de textos txtNivel
-    estado.pnivelActual = txtNivel; // paso puntero del onjecto creado. 
     lv_textarea_set_one_line(txtNivel, true); //Indico que es de tipo linea simple.
     lv_obj_set_size(txtNivel, 120, 42);
     lv_obj_set_pos(txtNivel, 160, 10);
@@ -191,10 +247,6 @@ static void CrearTabOperacion(lv_obj_t * parent)
     lv_obj_set_size(txtNivel, 50, 50); // lv_pct(90)
     lv_obj_add_state(txtNivel, LV_STATE_FOCUSED);
 */
-    
-    //A modo de ejemplo creo un boton y le asigno los estilos por defecto que cree dentro de la funcion AplicarEstiloBoton
-    lv_obj_t * btnSalir = lv_button_create(panel1); //Creo el objeto como hijo del padre=>Tab
-    BotonAplicarEstilo(btnSalir, "Salir", LCD_WIDTH-200, 250); //Aplico el estilo por defecto que hemos definido para los botones
 
 
     lv_obj_t * swAutoManual; //Creo switch
@@ -203,6 +255,13 @@ static void CrearTabOperacion(lv_obj_t * parent)
     lv_obj_add_flag(swAutoManual, LV_OBJ_FLAG_EVENT_BUBBLE);
     lv_obj_add_state(swAutoManual, LV_STATE_CHECKED);
     lv_obj_align(swAutoManual, LV_ALIGN_TOP_LEFT, 400,100);
+    ControlesPantallaOperacion.pAutoMan = swAutoManual; //almaceno el puntero al swith auto/Manual
+    
+    //A modo de ejemplo creo un boton y le asigno los estilos por defecto que cree dentro de la funcion AplicarEstiloBoton
+    lv_obj_t * btnSalir = lv_button_create(panel1); //Creo el objeto como hijo del padre=>Tab
+    BotonAplicarEstilo(btnSalir, "Salir", LCD_WIDTH-200, 250); //Aplico el estilo por defecto que hemos definido para los botones
+
+
 
 
 
@@ -228,7 +287,7 @@ static void CrearTabConfiguracion(lv_obj_t * parent)
     lv_obj_add_flag(lblNivelMin, LV_OBJ_FLAG_IGNORE_LAYOUT);
     lv_obj_add_style(lblNivelMin, &style_title,0);
     lv_label_set_text(lblNivelMin,"NIVEL MINIMO");
-
+   
     lv_obj_t * txtNivelMin = lv_textarea_create(panel2); //Creo la caja de textos txtNivel
     lv_textarea_set_one_line(txtNivelMin, true); //Indico que es de tipo linea simple.
     lv_obj_set_size(txtNivelMin, 120, 42); //Tamaño de caja de texto
@@ -236,6 +295,7 @@ static void CrearTabConfiguracion(lv_obj_t * parent)
     lv_textarea_set_align(txtNivelMin, LV_TEXT_ALIGN_RIGHT);
     lv_textarea_set_text(txtNivelMin, "001"); //TODO : Este valor debe obtenerse de la lectura del nivel del tanque 
 
+      
 
 
     lv_obj_t * lblNivelMax = lv_label_create(panel2); //Creo un Label para mostrar el texto NIVEL MAXIMO
@@ -250,7 +310,7 @@ static void CrearTabConfiguracion(lv_obj_t * parent)
     lv_obj_set_pos(txtNivelMax, 210, 162); //Posicion de caja de texto, +140 en X, -13) en Y (para alinear al texto plano)
     lv_textarea_set_align(txtNivelMax, LV_TEXT_ALIGN_RIGHT);
     lv_textarea_set_text(txtNivelMax, "002"); //TODO : Este valor debe obtenerse de la lectura del nivel del tanque 
-
+    
 
 
     lv_obj_t * lblCaudalMax = lv_label_create(panel2); //Creo un Label para mostrar el texto CAUDAL MAXIMO
@@ -318,7 +378,33 @@ static void CrearTabConfiguracion(lv_obj_t * parent)
     BotonAplicarEstilo(btnSalir, "Salir", 640, 310); 
     
 
+  //Teclado numerico 
+       
+    kbNumeric = lv_keyboard_create(panel2); //Creo el teclado
+    lv_keyboard_set_mode(kbNumeric, LV_KEYBOARD_MODE_NUMBER);
+    lv_obj_add_flag(kbNumeric, LV_OBJ_FLAG_HIDDEN); 
+    lv_obj_set_width(kbNumeric,400);
+    
+    
+    lv_obj_add_event_cb(kbNumeric, keyboard_event_handler, LV_EVENT_VALUE_CHANGED, NULL );
 
+    //// TECLADO NUMERICO 
+     /*Create a keyboard and add the new map as USER_1 mode*/
+    lv_obj_add_event_cb(txtNivelMin,ta_event_cb,LV_EVENT_ALL,kbNumeric);
+    lv_keyboard_set_textarea(kbNumeric,txtNivelMin);
+    
+    lv_obj_add_event_cb(txtNivelMax,ta_event_cb,LV_EVENT_ALL,kbNumeric);
+    lv_keyboard_set_textarea(kbNumeric,txtNivelMax);
+    
+    lv_obj_add_event_cb(txtCaudalMax,ta_event_cb,LV_EVENT_ALL,kbNumeric);
+    lv_keyboard_set_textarea(kbNumeric,txtCaudalMax);
+
+    lv_obj_add_event_cb(txtMinAbsoluto,ta_event_cb,LV_EVENT_ALL,kbNumeric);
+    lv_keyboard_set_textarea(kbNumeric,txtMinAbsoluto);
+
+
+    lv_obj_add_event_cb(txtMaxAbsoluto,ta_event_cb,LV_EVENT_ALL,kbNumeric);
+    lv_keyboard_set_textarea(kbNumeric,txtMaxAbsoluto);
 
 };
 

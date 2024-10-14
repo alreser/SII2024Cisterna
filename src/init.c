@@ -50,6 +50,7 @@ void TextBoxAplicarEstilo(lv_obj_t * objTextBox, enum TextBoxEdicionEnum Editabl
 {
 
 
+
 // ESTILOS ///////// 
     lv_style_init(&style_title);
     lv_style_set_text_font(&style_title, LV_FONT_MONTSERRAT_46);
@@ -83,25 +84,4 @@ void TextBoxAplicarEstilo(lv_obj_t * objTextBox, enum TextBoxEdicionEnum Editabl
 
 };
 
-extern void  ActualizarValoresTabOperacion()
-{
-    printf("Entra en ActualizarValoresIoperaci\n");
-    if (ControlesPantallaOperacion.pNivelTanque != NULL && ControlesPantallaOperacion.pConsumo != NULL)
-    {
-
-    char nivel[10];
-     itoa(estado.nivelActual,nivel,10);
-     lv_textarea_set_text( ControlesPantallaOperacion.pNivelTanque, nivel);
-
-
-    char consumo[10];
-     itoa(estado.vertidoHora ,consumo,10);
-     lv_textarea_set_text( ControlesPantallaOperacion.pConsumo, consumo);
-
-     printf("Dentro de ActualizarValoresTabOperacion\n");
-
-    }
-     
-
-
-};
+ 

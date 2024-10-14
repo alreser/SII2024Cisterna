@@ -21,6 +21,8 @@ static lv_style_t style_text_Normal; //Estilo de los textos normales de etiqueta
 static lv_style_t style_text_muted; // Estilo texto apagado
 
 
+
+
 enum TextBoxEdicionEnum
 {   
     Deshabilitado =0,  //El TextBox aparrecerá deshabilitadao
@@ -33,7 +35,6 @@ enum TextBoxEdicionEnum
 struct st_EstadoCisterna
 {
     int     nivelActual;
-    lv_obj_t * pnivelActual;
     int     vertidoHora;
     bool    modoAuto;
     bool    bombaEncendida;
@@ -55,11 +56,12 @@ struct st_ControlesPantallaOperacion
 {
     lv_obj_t * pNivelTanque;
     lv_obj_t * pConsumo;
+    lv_obj_t * pAutoMan;
 } ;
 
 
 
-void ActualizarValoresTabOperacion();
+
 
 //static void ControlCisterna_task(void *arg);
 

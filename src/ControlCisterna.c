@@ -20,16 +20,17 @@ extern struct st_EstadoCisterna estado;
    
     /* code */
    
-   estado.nivelActual++;
+   estado.nivelActual++; //Todo reemplazar por la lectura de los sensores de campo
 
    //TODO: QUITAR ESTE CODIGO DE PRUEBAS 
-   if (estado.nivelActual == 32100) estado.nivelActual = 10000; 
+   if (estado.nivelActual == 32100) estado.nivelActual = 10000;  //TODO eliminar codigo basura
    
-   //estado.nivelActual+=100;
+  
 
-    printf("Control Cisterna Task ->Nivel %d  puntero nivel %p \n", estado.nivelActual, &estado.nivelActual); 
-    vTaskDelay(2000/ portTICK_PERIOD_MS);
-    ActualizarValoresTabOperacion();
+    //printf("Control Cisterna Task ->Nivel %d  puntero nivel %p \n", estado.nivelActual, &estado.nivelActual);  
+    vTaskDelay(2000 / portTICK_PERIOD_MS); //lectura cada 2 segundos
+
+
    }
    
 }; 
