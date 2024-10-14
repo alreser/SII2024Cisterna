@@ -38,6 +38,7 @@ static const char *TAG = "LVGL";
  };
 
 extern void ControlCisterna_task(void *arg);
+extern esp_err_t PersistenciaLeer();
 
 static lv_indev_t * indev_touchpad = NULL;
 
@@ -316,12 +317,17 @@ void app_main(void)
         //lv_demo_widgets();
         PantallaPrincipal();
         lvgl_unlock();
-        // TODO: Cargar valores de configuracion y estado de operacion desde el almacenamiento NVS
+               
     }
-    
-        //Creo una tareas que realiza el control del estado de la cisterna. Se ejecuta en el core 1
-    xTaskCreatePinnedToCore(ControlCisterna_task, "ControlCisterna_task", 2048, NULL, 3, NULL,1);
 
+     //  Cargo valores de configuracion y estado de operacion desde el almacenamiento NVS
+        if (ESP_OK != PersistenciaLeer())
+        {
+            ESP_LOGI(TAG,"Error al intentar cargar el último estado del sistema y la configuración del sistema desde la NVS");
+        }
+
+    //Creo una tareas que realiza el control del estado de la cisterna. Se ejecuta en el core 1
+    xTaskCreatePinnedToCore(ControlCisterna_task, "ControlCisterna_task", 2048, NULL, 3, NULL,1);
 
 
 }

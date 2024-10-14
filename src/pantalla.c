@@ -3,10 +3,12 @@
 #include <lvgl.h>
 
 extern struct st_EstadoCisterna estado;
+extern struct st_ParametrosConfiguracion configuracion;
+
 extern bool lvgl_lock(int timeout_ms);
 extern void lvgl_unlock(void);
 
-TimerHandle_t timerPantalla; 
+TimerHandle_t timerPantalla; //Handler del timer que refresca la pantalla cada 500ms con los nuevos estados 
 
 struct st_ControlesPantallaOperacion ControlesPantallaOperacion = {
     .pNivelTanque = NULL,

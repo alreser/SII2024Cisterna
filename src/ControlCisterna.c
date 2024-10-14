@@ -2,12 +2,12 @@
 #include <freertos/FreeRTOS.h>
 #include <freertos/task.h>
 #include <nvs.h>
-
-
-
 #include <../headers/init.h>
 
+
 extern struct st_EstadoCisterna estado;
+extern struct st_ParametrosConfiguracion configuracion;
+
 
  void ControlCisterna_task(void *arg)
 {

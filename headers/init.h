@@ -48,10 +48,12 @@ struct st_ParametrosConfiguracion
     int     caudalMax;  //Caudal máximo permitivo antes de cerrar el vertido por fuga.
     int     maxAdmitivo; //Nivel de seguridad máximo permitido en modo Manual   
     int     nivelAgotamiento;  //nivel de activacion de alarma por agotamiento  
+    bool    modoAuto; //Infica si el sistema debe estar en ModoAutomatico = True o Manual=False.
 
     
 };
 
+/// @brief Contiene los punteros a los objetos TextArea de LVGL para  acceder a ellos desde otros módulos.
 struct st_ControlesPantallaOperacion
 {
     lv_obj_t * pNivelTanque;
@@ -59,11 +61,6 @@ struct st_ControlesPantallaOperacion
     lv_obj_t * pAutoMan;
 } ;
 
-
-
-
-
-//static void ControlCisterna_task(void *arg);
 
 
 void InicilizarComponentesPantalla() ;//Iniciliza los componentes Graficos de la pantalla
