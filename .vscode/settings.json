@@ -13,7 +13,9 @@
         "init.h": "c",
         "lvgl.h": "c",
         "lv_draw_sw_gradient.h": "c",
-        "task.h": "c"
+        "task.h": "c",
+        "nvs_flash.h": "c",
+        "nvs.h": "c"
     },
     "idf.flashType": "UART",
     "idf.port": "/dev/ttyUSB0",

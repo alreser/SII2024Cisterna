@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <freertos/FreeRTOS.h>
 #include <freertos/task.h>
+#include <nvs.h>
+
 
 
 #include <../headers/init.h>
@@ -35,5 +37,23 @@ extern struct st_EstadoCisterna estado;
    
 }; 
 
+/// @brief Lee desde NVS los parametros de configuracion del sistema y el ultimo  estado del sistema que fue guardado.
+/// @return  ESP_OK o alguna variante de  ESP_ERROR_*
+esp_err_t PersistenciaLeer(){
 
 
+
+
+   return ESP_OK;
+
+}
+
+/// @brief Guarda los valores actuales de Configuracion y estado del sistema en el almacen no volatil. NVS
+/// @return ESP_OK o alguna variante de ESP_ERROR_*
+esp_err_t PersistenciaGuardar(){
+
+
+
+
+   return ESP_OK;
+}
