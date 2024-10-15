@@ -59,6 +59,7 @@ struct st_ControlesPantallaOperacion
     lv_obj_t * pNivelTanque;
     lv_obj_t * pConsumo;
     lv_obj_t * pAutoMan;
+    lv_obj_t * pBomba;
 } ;
 
 
