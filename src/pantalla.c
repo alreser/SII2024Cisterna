@@ -13,7 +13,8 @@ TimerHandle_t timerPantalla; //Handler del timer que refresca la pantalla cada 5
 struct st_ControlesPantallaOperacion ControlesPantallaOperacion = {
     .pNivelTanque = NULL,
     .pConsumo = NULL,
-    .pAutoMan = false
+    .pAutoMan = false,
+    .pBomba = NULL
 };
 lv_obj_t * tabOperacion; //Puntero a ibjeto TAB de valores de Operacion
 lv_obj_t * tabConfiguracion;  //Puntero a TAB de Valores de configuracion del sistema
@@ -206,17 +207,16 @@ static void CrearTabOperacion(lv_obj_t * parent)
     //Nivel tanque 
     lv_obj_t * lblNivel = lv_label_create(panel1); //Creo un Label para mostrar el texto Nivel del Tanque(Lts)
     
-    lv_obj_align(lblNivel, LV_ALIGN_TOP_LEFT, 10,20);
+    lv_obj_align(lblNivel, LV_ALIGN_TOP_LEFT, 80,110);
     lv_obj_add_flag(lblNivel, LV_OBJ_FLAG_IGNORE_LAYOUT);
     lv_obj_add_style(lblNivel, &style_title,0);
     lv_label_set_text(lblNivel,"NIVEL TANQUE (Lts)");
-   
 
     
     lv_obj_t * txtNivel = lv_textarea_create(panel1); //Creo la caja de textos txtNivel
     lv_textarea_set_one_line(txtNivel, true); //Indico que es de tipo linea simple.
     lv_obj_set_size(txtNivel, 120, 42);
-    lv_obj_set_pos(txtNivel, 160, 10);
+    lv_obj_set_pos(txtNivel, 230, 100);
     lv_textarea_set_align(txtNivel, LV_TEXT_ALIGN_RIGHT);
     char nivel[10];
     itoa(estado.nivelActual,nivel,10);
@@ -225,7 +225,7 @@ static void CrearTabOperacion(lv_obj_t * parent)
 
 
     lv_obj_t * lblConsumo = lv_label_create(panel1); //Creo un Label para mostrar el texto Consumo(Hrs)
-    lv_obj_align(lblConsumo, LV_ALIGN_TOP_LEFT, 10,70);
+    lv_obj_align(lblConsumo, LV_ALIGN_TOP_LEFT, 80,220);
     lv_obj_add_flag(lblConsumo, LV_OBJ_FLAG_IGNORE_LAYOUT);
     lv_obj_add_style(lblConsumo, &style_title,0);
     lv_label_set_text(lblConsumo,"CONSUMO (Hrs)");
@@ -233,7 +233,7 @@ static void CrearTabOperacion(lv_obj_t * parent)
     lv_obj_t * txtConsumo = lv_textarea_create(panel1); //Creo la caja de textos txtConsumo
     lv_textarea_set_one_line(txtConsumo, true); //Indico que es de tipo linea simple.
     lv_obj_set_size(txtConsumo, 120, 42);
-    lv_obj_set_pos(txtConsumo, 160, 60);
+    lv_obj_set_pos(txtConsumo, 230, 210);
     lv_textarea_set_align(txtConsumo, LV_TEXT_ALIGN_RIGHT);
     char consumo[10];
     itoa(estado.vertidoHora,consumo,10);
@@ -241,29 +241,31 @@ static void CrearTabOperacion(lv_obj_t * parent)
     ControlesPantallaOperacion.pConsumo = txtConsumo; //almeceno puntero a txtConsumo para posterior actualizacion
 
 
-    //lv_obj_set_style_text_font(lblNivelValor, LV_FONT_MONTSERRAT_12, 0);
-
-/* 
-    lv_obj_t * txtNivel = lv_textarea_create(panel1) ;  //Creo un ob
-    lv_obj_align(txtNivel, LV_ALIGN_TOP_MID, 0, 70);
-    lv_obj_set_size(txtNivel, 50, 50); // lv_pct(90)
-    lv_obj_add_state(txtNivel, LV_STATE_FOCUSED);
-*/
-
+    lv_obj_t * lblAutoManual = lv_label_create(panel1); //Creo un Label para mostrar el texto Consumo(Hrs)
+    lv_obj_align(lblAutoManual, LV_ALIGN_TOP_LEFT, 480,110);
+    lv_obj_add_flag(lblAutoManual, LV_OBJ_FLAG_IGNORE_LAYOUT);
+    lv_obj_add_style(lblAutoManual, &style_title,0);
+    lv_label_set_text(lblAutoManual,"MODO");
 
     lv_obj_t * swAutoManual; //Creo switch
     swAutoManual = lv_switch_create(panel1);
     lv_obj_add_event_cb(swAutoManual, automanual_event, LV_EVENT_ALL, NULL);
     lv_obj_add_flag(swAutoManual, LV_OBJ_FLAG_EVENT_BUBBLE);
     lv_obj_add_state(swAutoManual, LV_STATE_CHECKED);
-    lv_obj_align(swAutoManual, LV_ALIGN_TOP_LEFT, 400,100);
+    lv_obj_align(swAutoManual, LV_ALIGN_TOP_LEFT, 550,105);
     ControlesPantallaOperacion.pAutoMan = swAutoManual; //almaceno el puntero al swith auto/Manual
     
-    //A modo de ejemplo creo un boton y le asigno los estilos por defecto que cree dentro de la funcion AplicarEstiloBoton
-    lv_obj_t * btnSalir = lv_button_create(panel1); //Creo el objeto como hijo del padre=>Tab
-    BotonAplicarEstilo(btnSalir, "Salir", LCD_WIDTH-200, 250); //Aplico el estilo por defecto que hemos definido para los botones
+    lv_obj_t * lblBomba = lv_label_create(panel1); //Creo un Label para mostrar el texto Consumo(Hrs)
+    lv_obj_align(lblBomba, LV_ALIGN_TOP_LEFT, 480,220);
+    lv_obj_add_flag(lblBomba, LV_OBJ_FLAG_IGNORE_LAYOUT);
+    lv_obj_add_style(lblBomba, &style_title,0);
+    lv_label_set_text(lblBomba,"BOMBA");
 
-
+    lv_obj_t * ledBomba = lv_led_create(panel1);
+    lv_led_set_color(ledBomba, lv_color_hex(0x43d319));
+    lv_led_set_brightness(ledBomba, 200);
+    lv_obj_align(ledBomba, LV_ALIGN_TOP_LEFT, 565,215);
+    ControlesPantallaOperacion.pBomba = ledBomba;
 
 
 
@@ -289,13 +291,15 @@ static void CrearTabConfiguracion(lv_obj_t * parent)
     lv_obj_add_flag(lblNivelMin, LV_OBJ_FLAG_IGNORE_LAYOUT);
     lv_obj_add_style(lblNivelMin, &style_title,0);
     lv_label_set_text(lblNivelMin,"NIVEL MINIMO");
-   
+
     lv_obj_t * txtNivelMin = lv_textarea_create(panel2); //Creo la caja de textos txtNivel
     lv_textarea_set_one_line(txtNivelMin, true); //Indico que es de tipo linea simple.
     lv_obj_set_size(txtNivelMin, 120, 42); //Tamaño de caja de texto
     lv_obj_set_pos(txtNivelMin, 210, 62); //Posicion de caja de texto, +140 en X, -13 en Y (para alinear al texto plano)
     lv_textarea_set_align(txtNivelMin, LV_TEXT_ALIGN_RIGHT);
-    lv_textarea_set_text(txtNivelMin, "001"); //TODO : Este valor debe obtenerse de la lectura del nivel del tanque 
+    char valorNivelMin[10];
+    itoa(configuracion.nivelMin, valorNivelMin,10);
+    lv_textarea_set_text(txtNivelMin,valorNivelMin); //TODO : Este valor debe obtenerse de la lectura del nivel del tanque 
 
       
 
@@ -311,8 +315,9 @@ static void CrearTabConfiguracion(lv_obj_t * parent)
     lv_obj_set_size(txtNivelMax, 120, 42); //Tamaño de caja de texto
     lv_obj_set_pos(txtNivelMax, 210, 162); //Posicion de caja de texto, +140 en X, -13) en Y (para alinear al texto plano)
     lv_textarea_set_align(txtNivelMax, LV_TEXT_ALIGN_RIGHT);
-    lv_textarea_set_text(txtNivelMax, "002"); //TODO : Este valor debe obtenerse de la lectura del nivel del tanque 
-    
+    char valorNivelMax[10];
+    itoa(configuracion.nivelMax, valorNivelMax,10);
+    lv_textarea_set_text(txtNivelMax,valorNivelMax); //TODO : Este valor debe obtenerse de la lectura del nivel del tanque 
 
 
     lv_obj_t * lblCaudalMax = lv_label_create(panel2); //Creo un Label para mostrar el texto CAUDAL MAXIMO
@@ -326,7 +331,9 @@ static void CrearTabConfiguracion(lv_obj_t * parent)
     lv_obj_set_size(txtCaudalMax, 120, 42); //Tamaño de caja de texto
     lv_obj_set_pos(txtCaudalMax, 210, 262); //Posicion de caja de texto, +140 en X, -13) en Y (para alinear al texto plano)
     lv_textarea_set_align(txtCaudalMax, LV_TEXT_ALIGN_RIGHT);
-    lv_textarea_set_text(txtCaudalMax, "003"); //TODO : Este valor debe obtenerse de la lectura del nivel del tanque 
+    char valorCaudalMax[10];
+    itoa(configuracion.caudalMax,valorCaudalMax,10);
+    lv_textarea_set_text(txtCaudalMax,valorCaudalMax); //TODO : Este valor debe obtenerse de la lectura del nivel del tanque 
 
 
 
@@ -341,7 +348,9 @@ static void CrearTabConfiguracion(lv_obj_t * parent)
     lv_obj_set_size(txtMinAbsoluto, 120, 42); //Tamaño de caja de texto
     lv_obj_set_pos(txtMinAbsoluto, 555, 62); //Posicion de caja de texto, +155 en X, -13 en Y (para alinear al texto plano)
     lv_textarea_set_align(txtMinAbsoluto, LV_TEXT_ALIGN_RIGHT);
-    lv_textarea_set_text(txtMinAbsoluto, "004"); //TODO : Este valor debe obtenerse de la lectura del nivel del tanque 
+    char valorMinAbsoluto[10];
+    itoa(configuracion.nivelAgotamiento,valorMinAbsoluto,10);
+    lv_textarea_set_text(txtMinAbsoluto,valorMinAbsoluto); //TODO : Este valor debe obtenerse de la lectura del nivel del tanque 
 
 
 
@@ -356,7 +365,9 @@ static void CrearTabConfiguracion(lv_obj_t * parent)
     lv_obj_set_size(txtMaxAbsoluto, 120, 42); //Tamaño de caja de texto
     lv_obj_set_pos(txtMaxAbsoluto, 555, 162); //Posicion de caja de texto, +155 en X, -13) en Y (para alinear al texto plano)
     lv_textarea_set_align(txtMaxAbsoluto, LV_TEXT_ALIGN_RIGHT);
-    lv_textarea_set_text(txtMaxAbsoluto, "005"); //TODO : Este valor debe obtenerse de la lectura del nivel del tanque 
+    char valorMaxAbsoluto[10];
+    itoa(configuracion.maxAdmitivo,valorMaxAbsoluto,10);
+    lv_textarea_set_text(txtMaxAbsoluto,valorMaxAbsoluto); //TODO : Este valor debe obtenerse de la lectura del nivel del tanque 
 
 
 
