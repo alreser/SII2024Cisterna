@@ -34,8 +34,8 @@ enum TextBoxEdicionEnum
 
 struct st_EstadoCisterna
 {
-    int     nivelActual;
-    int     vertidoHora;
+    long     nivelActual;
+    long     vertidoHora;
     bool    modoAuto;
     bool    bombaEncendida;
 
@@ -43,11 +43,11 @@ struct st_EstadoCisterna
 
 struct st_ParametrosConfiguracion
 {
-    int     nivelMin;   //Mínimo nivel para encender bomba en modo automático
-    int     nivelMax;   //Máximo nivel para apagar bomba en modo automático
-    int     caudalMax;  //Caudal máximo permitivo antes de cerrar el vertido por fuga.
-    int     maxAdmitivo; //Nivel de seguridad máximo permitido en modo Manual   
-    int     nivelAgotamiento;  //nivel de activacion de alarma por agotamiento  
+    long     nivelMin;   //Mínimo nivel para encender bomba en modo automático
+    long     nivelMax;   //Máximo nivel para apagar bomba en modo automático
+    long     caudalMax;  //Caudal máximo permitivo antes de cerrar el vertido por fuga.
+    long     maxAdmitivo; //Nivel de seguridad máximo permitido en modo Manual   
+    long     nivelAgotamiento;  //nivel de activacion de alarma por agotamiento  
     bool    modoAuto; //Infica si el sistema debe estar en ModoAutomatico = True o Manual=False.
 
     
