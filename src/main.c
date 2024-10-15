@@ -319,7 +319,7 @@ void app_main(void)
         lvgl_unlock();
                
     }
-
+/*
      //  Cargo valores de configuracion y estado de operacion desde el almacenamiento NVS
         if (ESP_OK != PersistenciaLeer())
         {
@@ -328,6 +328,6 @@ void app_main(void)
 
     //Creo una tareas que realiza el control del estado de la cisterna. Se ejecuta en el core 1
     xTaskCreatePinnedToCore(ControlCisterna_task, "ControlCisterna_task", 2048, NULL, 3, NULL,1);
-
+*/
 
 }
