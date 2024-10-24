@@ -50,6 +50,20 @@ void  ActualizarValoresTabOperacion()
             char consumo[10];
             itoa(estado.vertidoHora ,consumo,10);
             lv_textarea_set_text( ControlesPantallaOperacion.pConsumo, consumo);
+
+            if (estado.modoAuto) {
+                // TRUE => Modo AUTO
+                 lv_obj_add_state(ControlesPantallaOperacion.pAutoMan, LV_STATE_CHECKED);
+                 }
+                 else
+                 {
+                    //FALSE => Modo MAN
+                    lv_obj_remove_state(ControlesPantallaOperacion.pAutoMan, LV_STATE_CHECKED); 
+                    
+                 }
+
+             //TODO : Añadir indicacion de estado de operacion de la bomba [Encendida ! apagada]
+
             lvgl_unlock(); //Libero el mutex
        }
     // printf("Dentro de ActualizarValoresTabOperacion\n");
@@ -122,7 +136,9 @@ static void btnGuardar_click(lv_event_t * e)
 
     //2. Guardo el estado actual tambien 
     //TODO. Cargo el estaado actual
-      //Asignar color segun estado de bomba Encendida=>Verde. Apagada=>Roja   //lv_led_set_color(ledBomba, lv_color_hex(0xff2816)); //lv_color_hex(0x43d319) <= verde -  Rojo => lv_color_hex(0xff2816)
+      //2.1Asignar color segun estado de bomba Encendida=>Verde. Apagada=>Roja   //lv_led_set_color(ledBomba, lv_color_hex(0xff2816)); //lv_color_hex(0x43d319) <= verde -  Rojo => lv_color_hex(0xff2816)
+
+     // 2.2 Asignar Modo de operacion bomba Auto/MAN Segun switch 
 
 
     //3. Persisto los valores en el nvs
@@ -146,6 +162,9 @@ static void automanual_event(lv_event_t * e)
     lv_event_code_t code = lv_event_get_code(e);
     lv_obj_t * obj = lv_event_get_target(e);
     if(code == LV_EVENT_VALUE_CHANGED) {
+        //LV_STATE_CHECKED
+        estado.modoAuto  = ( lv_obj_has_state(obj, LV_STATE_CHECKED)) ? true : false; 
+        printf("estado del objeto %s\n", lv_obj_has_state(obj, LV_STATE_CHECKED) ? "On" : "Off" );
         LV_UNUSED(obj);
 
         
@@ -291,7 +310,7 @@ static void CrearTabOperacion(lv_obj_t * parent)
     lv_label_set_text(lblBomba,"BOMBA");
 
     lv_obj_t * ledBomba = lv_led_create(panel1);
-    lv_led_set_color(ledBomba, lv_color_hex(0xff2816)); //lv_color_hex(0x43d319) <= verde -  Rojo => lv_color_hex(0xff2816)
+    lv_led_set_color(ledBomba, lv_color_hex(0x43d319)); //lv_color_hex(0x43d319) <= verde -  Rojo => lv_color_hex(0xff2816)
     lv_led_set_brightness(ledBomba, 200);
     lv_obj_align(ledBomba, LV_ALIGN_TOP_LEFT, 565,215);
     ControlesPantallaOperacion.pBomba = ledBomba;
