@@ -122,6 +122,7 @@ static void btnGuardar_click(lv_event_t * e)
 
     //2. Guardo el estado actual tambien 
     //TODO. Cargo el estaado actual
+      //Asignar color segun estado de bomba Encendida=>Verde. Apagada=>Roja   //lv_led_set_color(ledBomba, lv_color_hex(0xff2816)); //lv_color_hex(0x43d319) <= verde -  Rojo => lv_color_hex(0xff2816)
 
 
     //3. Persisto los valores en el nvs
@@ -273,14 +274,14 @@ static void CrearTabOperacion(lv_obj_t * parent)
     lv_obj_align(lblAutoManual, LV_ALIGN_TOP_LEFT, 480,110);
     lv_obj_add_flag(lblAutoManual, LV_OBJ_FLAG_IGNORE_LAYOUT);
     lv_obj_add_style(lblAutoManual, &style_title,0);
-    lv_label_set_text(lblAutoManual,"MODO");
+    lv_label_set_text(lblAutoManual,"AUTO/MAN");
 
     lv_obj_t * swAutoManual; //Creo switch
     swAutoManual = lv_switch_create(panel1);
     lv_obj_add_event_cb(swAutoManual, automanual_event, LV_EVENT_ALL, NULL);
     lv_obj_add_flag(swAutoManual, LV_OBJ_FLAG_EVENT_BUBBLE);
     lv_obj_add_state(swAutoManual, LV_STATE_CHECKED);
-    lv_obj_align(swAutoManual, LV_ALIGN_TOP_LEFT, 550,105);
+    lv_obj_align(swAutoManual, LV_ALIGN_TOP_LEFT, 565,105);
     ControlesPantallaOperacion.pAutoMan = swAutoManual; //almaceno el puntero al swith auto/Manual
     
     lv_obj_t * lblBomba = lv_label_create(panel1); //Creo un Label para mostrar el texto Consumo(Hrs)
@@ -290,7 +291,7 @@ static void CrearTabOperacion(lv_obj_t * parent)
     lv_label_set_text(lblBomba,"BOMBA");
 
     lv_obj_t * ledBomba = lv_led_create(panel1);
-    lv_led_set_color(ledBomba, lv_color_hex(0x43d319));
+    lv_led_set_color(ledBomba, lv_color_hex(0xff2816)); //lv_color_hex(0x43d319) <= verde -  Rojo => lv_color_hex(0xff2816)
     lv_led_set_brightness(ledBomba, 200);
     lv_obj_align(ledBomba, LV_ALIGN_TOP_LEFT, 565,215);
     ControlesPantallaOperacion.pBomba = ledBomba;
