@@ -34,8 +34,8 @@ enum TextBoxEdicionEnum
 
 struct st_EstadoCisterna
 {
-    long     nivelActual;
-    long     vertidoHora;
+    int64_t     nivelActual;
+    int64_t     vertidoHora;
     bool    modoAuto;
     bool    bombaEncendida;
 
@@ -43,11 +43,11 @@ struct st_EstadoCisterna
 
 struct st_ParametrosConfiguracion
 {
-    long     nivelMin;   //Mínimo nivel para encender bomba en modo automático
-    long     nivelMax;   //Máximo nivel para apagar bomba en modo automático
-    long     caudalMax;  //Caudal máximo permitivo antes de cerrar el vertido por fuga.
-    long     maxAdmitivo; //Nivel de seguridad máximo permitido en modo Manual   
-    long     nivelAgotamiento;  //nivel de activacion de alarma por agotamiento  
+    int64_t     nivelMin;   //Mínimo nivel para encender bomba en modo automático
+    int64_t     nivelMax;   //Máximo nivel para apagar bomba en modo automático
+    int64_t     caudalMax;  //Caudal máximo permitivo antes de cerrar el vertido por fuga.
+    int64_t     maxAdmitivo; //Nivel de seguridad máximo permitido en modo Manual   
+    int64_t     nivelAgotamiento;  //nivel de activacion de alarma por agotamiento  
     bool    modoAuto; //Infica si el sistema debe estar en ModoAutomatico = True o Manual=False.
 
     
@@ -62,6 +62,14 @@ struct st_ControlesPantallaOperacion
     lv_obj_t * pBomba;
 } ;
 
+struct st_ControlesPantallaConfiguracion
+{
+    lv_obj_t * pNivelMinimo;
+    lv_obj_t * pNivelMaximo;
+    lv_obj_t * pCaudalMaximo;
+    lv_obj_t * pMinimoAbsoluto;
+    lv_obj_t * pMaximoAbsoluto;
+} ;
 
 
 void InicilizarComponentesPantalla() ;//Iniciliza los componentes Graficos de la pantalla

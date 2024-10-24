@@ -7,6 +7,7 @@ extern struct st_ParametrosConfiguracion configuracion;
 
 extern bool lvgl_lock(int timeout_ms);
 extern void lvgl_unlock(void);
+extern esp_err_t PersistenciaGuardar();
 
 TimerHandle_t timerPantalla; //Handler del timer que refresca la pantalla cada 500ms con los nuevos estados 
 
@@ -16,6 +17,15 @@ struct st_ControlesPantallaOperacion ControlesPantallaOperacion = {
     .pAutoMan = false,
     .pBomba = NULL
 };
+struct st_ControlesPantallaConfiguracion ControlesPantallaConfiguracion = {
+    .pNivelMinimo = NULL,
+    .pNivelMaximo = NULL,
+    .pCaudalMaximo = NULL,
+    .pMinimoAbsoluto = NULL,
+    .pMaximoAbsoluto = NULL
+} ;
+
+
 lv_obj_t * tabOperacion; //Puntero a ibjeto TAB de valores de Operacion
 lv_obj_t * tabConfiguracion;  //Puntero a TAB de Valores de configuracion del sistema
 lv_obj_t * tabView; //Punto a TABVIEW principal de la aplicacion
@@ -55,9 +65,9 @@ static void keyboard_event_handler(lv_event_t * e){
 	lv_keyboard_t * kb = (lv_keyboard_t *)obj;
 	const char * txt = lv_keyboard_get_button_text(kb, lv_keyboard_get_selected_button(obj));
 
-    printf("Presiono el boton [%s]", txt);
+    //printf("Presiono el boton [%s]", txt);
 	if(strcmp(txt, LV_SYMBOL_OK) == 0) {
-		printf("boton ok...");
+		//printf("boton ok...");
         lv_obj_add_flag(obj, LV_OBJ_FLAG_HIDDEN); // Oculto el teclado ante el OK
 		//lv_event_send(kb->ta, LV_EVENT_READY, NULL);
 	};
@@ -76,13 +86,13 @@ static void ta_event_cb(lv_event_t * e){
         //De acuardo al textarea que solicita el keyboard asigno la posicion en pantalla 
             if (lv_obj_get_x(ta) < (LCD_WIDTH/2)){
                 //el control esta del lado izquierdo 
-                printf("Izq Posicion del control que llama [x,y]=[%" PRId32 "\n,%" PRId32 "\n]", lv_obj_get_x(ta), lv_obj_get_y(ta));
+                //printf("Izq Posicion del control que llama [x,y]=[%" PRId32 "\n,%" PRId32 "\n]", lv_obj_get_x(ta), lv_obj_get_y(ta));
                 lv_obj_set_pos(kbNumeric,180,-10); 
                  
             }
             else{
                 // esta del lado derecho 
-                printf("der Posicion del control que llama [x,y]=[%" PRId32 "\n,%" PRId32 "\n]", lv_obj_get_x(ta), lv_obj_get_y(ta));
+                //printf("der Posicion del control que llama [x,y]=[%" PRId32 "\n,%" PRId32 "\n]", lv_obj_get_x(ta), lv_obj_get_y(ta));
                 lv_obj_set_pos(kbNumeric,-180,-10);
             }
        // lv_obj_set_pos(kbNumeric,200,200);
@@ -103,11 +113,29 @@ static void btnGuardar_click(lv_event_t * e)
     if(code == LV_EVENT_CLICKED) {
         
     //TODO: Verificar y almacenar los valores introdicidos por el usuario en el NVS del esp32
-     
-       
+    //1.cargo los valores de pantalla ingresados por el usuario en la estructura de Configuracion
+    configuracion.nivelMin = (int64_t)atol(lv_textarea_get_text(ControlesPantallaConfiguracion.pNivelMinimo));
+    configuracion.nivelMax = (int64_t)atol(lv_textarea_get_text(ControlesPantallaConfiguracion.pNivelMaximo));
+    configuracion.caudalMax = (int64_t)atol(lv_textarea_get_text(ControlesPantallaConfiguracion.pCaudalMaximo));
+    configuracion.nivelAgotamiento = (int64_t)atol(lv_textarea_get_text(ControlesPantallaConfiguracion.pMinimoAbsoluto));
+    configuracion.maxAdmitivo = (int64_t)atol(lv_textarea_get_text(ControlesPantallaConfiguracion.pMaximoAbsoluto));
 
-        //actualizo el control en pantalla. 
-        ActualizarValoresTabOperacion();
+    //2. Guardo el estado actual tambien 
+    //TODO. Cargo el estaado actual
+
+
+    //3. Persisto los valores en el nvs
+     if (ESP_OK != PersistenciaGuardar()) 
+        {printf("Error al Persistir Valores\n");}
+        else
+        {
+            printf("Valores guardados Correctamente!!!\n");
+            //Para solventar el error de LVGL que al utilizar NVS corre la pantalla y queda el tab cortado 
+            // una vez almacenados los valores, elimino el objeto screen y lo vuelvo a cargar.
+            lv_obj_delete(lv_screen_active());
+            PantallaPrincipal();
+        }
+    
     }
 };
 
@@ -297,6 +325,7 @@ static void CrearTabConfiguracion(lv_obj_t * parent)
     lv_obj_set_size(txtNivelMin, 120, 42); //Tamaño de caja de texto
     lv_obj_set_pos(txtNivelMin, 210, 62); //Posicion de caja de texto, +140 en X, -13 en Y (para alinear al texto plano)
     lv_textarea_set_align(txtNivelMin, LV_TEXT_ALIGN_RIGHT);
+    ControlesPantallaConfiguracion.pNivelMinimo = txtNivelMin; // Almaceno el punto al textarea de nivelminimo
     char valorNivelMin[10];
     itoa(configuracion.nivelMin, valorNivelMin,10);
     lv_textarea_set_text(txtNivelMin,valorNivelMin); //TODO : Este valor debe obtenerse de la lectura del nivel del tanque 
@@ -315,6 +344,7 @@ static void CrearTabConfiguracion(lv_obj_t * parent)
     lv_obj_set_size(txtNivelMax, 120, 42); //Tamaño de caja de texto
     lv_obj_set_pos(txtNivelMax, 210, 162); //Posicion de caja de texto, +140 en X, -13) en Y (para alinear al texto plano)
     lv_textarea_set_align(txtNivelMax, LV_TEXT_ALIGN_RIGHT);
+    ControlesPantallaConfiguracion.pNivelMaximo = txtNivelMax; // Almaceno el punto al textarea de txtNivelMax
     char valorNivelMax[10];
     itoa(configuracion.nivelMax, valorNivelMax,10);
     lv_textarea_set_text(txtNivelMax,valorNivelMax); //TODO : Este valor debe obtenerse de la lectura del nivel del tanque 
@@ -331,6 +361,7 @@ static void CrearTabConfiguracion(lv_obj_t * parent)
     lv_obj_set_size(txtCaudalMax, 120, 42); //Tamaño de caja de texto
     lv_obj_set_pos(txtCaudalMax, 210, 262); //Posicion de caja de texto, +140 en X, -13) en Y (para alinear al texto plano)
     lv_textarea_set_align(txtCaudalMax, LV_TEXT_ALIGN_RIGHT);
+    ControlesPantallaConfiguracion.pCaudalMaximo = txtCaudalMax; // Almaceno el punto al textarea de txtCaudalMax
     char valorCaudalMax[10];
     itoa(configuracion.caudalMax,valorCaudalMax,10);
     lv_textarea_set_text(txtCaudalMax,valorCaudalMax); //TODO : Este valor debe obtenerse de la lectura del nivel del tanque 
@@ -348,6 +379,7 @@ static void CrearTabConfiguracion(lv_obj_t * parent)
     lv_obj_set_size(txtMinAbsoluto, 120, 42); //Tamaño de caja de texto
     lv_obj_set_pos(txtMinAbsoluto, 555, 62); //Posicion de caja de texto, +155 en X, -13 en Y (para alinear al texto plano)
     lv_textarea_set_align(txtMinAbsoluto, LV_TEXT_ALIGN_RIGHT);
+    ControlesPantallaConfiguracion.pMinimoAbsoluto = txtMinAbsoluto; // Almaceno el punto al textarea de txtMinAbsoluto
     char valorMinAbsoluto[10];
     itoa(configuracion.nivelAgotamiento,valorMinAbsoluto,10);
     lv_textarea_set_text(txtMinAbsoluto,valorMinAbsoluto); //TODO : Este valor debe obtenerse de la lectura del nivel del tanque 
@@ -365,6 +397,7 @@ static void CrearTabConfiguracion(lv_obj_t * parent)
     lv_obj_set_size(txtMaxAbsoluto, 120, 42); //Tamaño de caja de texto
     lv_obj_set_pos(txtMaxAbsoluto, 555, 162); //Posicion de caja de texto, +155 en X, -13) en Y (para alinear al texto plano)
     lv_textarea_set_align(txtMaxAbsoluto, LV_TEXT_ALIGN_RIGHT);
+    ControlesPantallaConfiguracion.pMaximoAbsoluto = txtMaxAbsoluto; // Almaceno el punto al textarea de txtMaxAbsoluto
     char valorMaxAbsoluto[10];
     itoa(configuracion.maxAdmitivo,valorMaxAbsoluto,10);
     lv_textarea_set_text(txtMaxAbsoluto,valorMaxAbsoluto); //TODO : Este valor debe obtenerse de la lectura del nivel del tanque 

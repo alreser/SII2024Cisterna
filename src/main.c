@@ -25,16 +25,16 @@ static const char *TAG = "LVGL";
  {
     .bombaEncendida = false,
     .modoAuto = false, 
-    .nivelActual = 100, 
-    .vertidoHora = 230
+    .nivelActual = 0, 
+    .vertidoHora = 0
  } ;
 
   struct st_ParametrosConfiguracion configuracion = {
-    .nivelMin = 5000,
-    .nivelMax = 23000,
-    .caudalMax = 3000,
-    .maxAdmitivo = 24000,
-    .nivelAgotamiento = 1000
+    .nivelMin = 0,
+    .nivelMax = 0,
+    .caudalMax = 0,
+    .maxAdmitivo = 0,
+    .nivelAgotamiento = 0
  };
 
 extern void ControlCisterna_task(void *arg);
@@ -58,11 +58,11 @@ void lvgl_lcd_init(lv_display_t *disp)
 
     const esp_lcd_rgb_panel_config_t st7262_panel_config = {
         .data_width = 16,
-        .num_fbs = LCD_NUM_FB,
+        .num_fbs = LCD_NUM_FB,  
         .clk_src = LCD_CLK_SRC_PLL160M,
         .timings = {
-            .pclk_hz = (16*1000000),
-            .h_res = LCD_WIDTH,
+            .pclk_hz = (16*1000000), 
+            .h_res = LCD_WIDTH, 
             .v_res = LCD_HEIGHT,
             .hsync_pulse_width = 4,
             .hsync_back_porch = 8,
@@ -78,7 +78,7 @@ void lvgl_lcd_init(lv_display_t *disp)
                 .pclk_idle_high = false,
             },
         },
-        .sram_trans_align = 8,
+        .sram_trans_align = 8, 
         .psram_trans_align = 64,
         .hsync_gpio_num = GPIO_NUM_39,
         .vsync_gpio_num = GPIO_NUM_41,
@@ -106,7 +106,7 @@ void lvgl_lcd_init(lv_display_t *disp)
     lv_display_set_flush_cb(disp, lvgl_disp_flush);
 
 #if LCD_NUM_FB == 2
-    buffer_size = LCD_WIDTH * LCD_HEIGHT * 2; // 2 = 16bit color data
+    buffer_size = LCD_WIDTH * LCD_HEIGHT * 2; // 2 = 16bit color data 
     esp_lcd_rgb_panel_get_frame_buffer(panel_handle, 2, &buf1, &buf2);
     lv_display_set_buffers(disp, buf1, buf2, buffer_size, LV_DISPLAY_RENDER_MODE_DIRECT);
 #else
@@ -114,6 +114,8 @@ void lvgl_lcd_init(lv_display_t *disp)
     buf1 = heap_caps_malloc(sizeof(lv_color_t) * buffer_size, MALLOC_CAP_SPIRAM);
     lv_display_set_buffers(disp, buf1, buf2, buffer_size, LV_DISPLAY_RENDER_MODE_PARTIAL);
 #endif
+
+
 }
 
 uint16_t map(uint16_t n, uint16_t in_min, uint16_t in_max, uint16_t out_min, uint16_t  out_max)
@@ -261,6 +263,13 @@ static void lvgl_port_task(void *arg)
 
 void app_main(void)
 {
+     //  Cargo valores de configuracion y estado de operacion desde el almacenamiento NVS
+        if (ESP_OK != PersistenciaLeer())
+        {
+            //ESP_LOGI(TAG,"Error al intentar cargar el último estado del sistema y la configuración del sistema desde la NVS");
+            printf("Error al intentar cargar el último estado del sistema y la configuración del sistema desde la NVS\n");
+        }
+    
     ESP_LOGI(TAG, "Turn on LCD backlight");
     ledc_timer_config_t ledc_timer = {
             .speed_mode       = LEDC_LOW_SPEED_MODE,
@@ -319,15 +328,11 @@ void app_main(void)
         lvgl_unlock();
                
     }
-/*
-     //  Cargo valores de configuracion y estado de operacion desde el almacenamiento NVS
-        if (ESP_OK != PersistenciaLeer())
-        {
-            ESP_LOGI(TAG,"Error al intentar cargar el último estado del sistema y la configuración del sistema desde la NVS");
-        }
+
+
 
     //Creo una tareas que realiza el control del estado de la cisterna. Se ejecuta en el core 1
     xTaskCreatePinnedToCore(ControlCisterna_task, "ControlCisterna_task", 2048, NULL, 3, NULL,1);
-*/
+
 
 }
